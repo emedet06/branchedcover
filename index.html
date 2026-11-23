@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>İki katlı oda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,500;7..72,650&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* VOICE: an invitation to walk inside a mathematical space; short, concrete, exact, crediting those who came first.
+   IDEA: a house whose stairs are the knot's veil (Thurston's "Knots to Narnia" portal), with 2 to 5 floors.
+   PICTURE: the first-person room, full width, with an outside view of the knot and your path in the corner.
+   COLOUR and TYPE: one colour per floor (blue, orange, green, purple, yellow), pale gold knot, night frame; Literata + Source Sans 3.
+   LAYOUT: title, room, controls and the room's mathematics, then explanation, prior work and what is new here. */
+:root{color-scheme:light dark;--bg:light-dark(#f6f7f9,#0a0f14);--ink:light-dark(#121820,#e6ebf0);--quiet:light-dark(#596473,#98a5b3);--rule:light-dark(#dce1e7,#1e2934);--panel:light-dark(#ffffff,#10171f);--chip:light-dark(#e9edf2,#16212c);--gold:#f5ad3c}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16.5px/1.55 "Source Sans 3",system-ui,sans-serif;overflow-x:clip}
+.band{padding:clamp(18px,3vw,40px) max(4vw,16px);max-width:1240px;margin:auto}
+.head{padding-bottom:6px}
+h1{font:650 clamp(32px,4.4vw,50px)/1.05 Literata,Georgia,serif;margin:0 0 10px}
+.lead{margin:0;max-width:74ch;color:var(--quiet);font-size:17px}
+.stage{position:relative;border-radius:14px;overflow:hidden;background:#0e1620;height:min(74vh,700px);min-height:440px;touch-action:none;outline:none}
+.stage canvas{display:block;width:100%;height:100%}
+.stage:focus-visible{box-shadow:0 0 0 3px var(--gold)}
+.floor{position:absolute;left:14px;top:12px;font:650 20px/1 Literata,Georgia,serif;color:#fff;padding:9px 14px;border-radius:10px;background:#4f86c6;transition:background .25s;pointer-events:none}
+.floor small{display:block;font:600 12.5px "Source Sans 3",sans-serif;opacity:.92;margin-top:4px}
+.outcap{position:absolute;right:12px;top:12px;font:600 12px "Source Sans 3",sans-serif;color:#cfd9e3;background:#0e1620cc;border-radius:6px;padding:2px 7px;pointer-events:none}
+.tip{position:absolute;left:14px;bottom:12px;right:14px;font-size:13.5px;color:#d9e3ec;text-shadow:0 1px 3px #000;pointer-events:none}
+.flash{position:absolute;inset:0;pointer-events:none;opacity:0}
+#dial{position:absolute;left:14px;bottom:40px;width:132px;height:132px;pointer-events:none;display:none}
+.touch{position:absolute;right:12px;bottom:40px;display:none;gap:8px;flex-direction:column}
+.touch button{width:56px;height:56px;border-radius:50%;border:1px solid #ffffff55;background:#0e1620b3;color:#fff;font:600 13px "Source Sans 3",sans-serif}
+@media(pointer:coarse),(max-width:700px){.touch{display:flex}.tip{right:84px}}
+#glerr[hidden]{display:none}#glerr{position:absolute;inset:0;display:grid;place-items:center;color:#cfd8e2;padding:24px;text-align:center}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:14px 0 0}
+.bar button{font:600 15px "Source Sans 3",sans-serif;min-height:44px;padding:0 14px;border-radius:10px;border:1px solid var(--rule);background:var(--chip);color:var(--ink);cursor:pointer}
+.bar button[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.bar .lab{font-weight:600;color:var(--quiet);font-size:14.5px}
+.bar .sep{width:1px;height:28px;background:var(--rule);margin:0 4px}
+button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.math{margin-top:14px;background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:16px 18px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:8px 24px;align-items:start}
+@media(max-width:800px){.math{grid-template-columns:minmax(0,1fr)}}
+.math .big{font:650 22px/1.25 Literata,Georgia,serif;margin:0}
+.math p{margin:4px 0}.math .q{color:var(--quiet);font-size:15px}
+.vrbox{margin-top:12px;font-size:15px;color:var(--quiet)}
+.cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-top:24px}
+@media(max-width:900px){.cols{grid-template-columns:minmax(0,1fr)}}
+h2{font:650 21px/1.2 Literata,Georgia,serif;margin:0 0 8px}
+.cols p{margin:0 0 10px}.cols ol,.cols ul{margin:0 0 10px;padding-left:20px}.cols li{margin:4px 0}
+.formula{font:500 17px/1.4 Literata,Georgia,serif;background:var(--chip);border-radius:10px;padding:10px 12px;margin:10px 0}
+.prior{margin-top:28px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:24px}
+@media(max-width:900px){.prior{grid-template-columns:minmax(0,1fr)}}
+.prior ul{padding-left:18px;margin:0}.prior li{margin:0 0 10px}
+.prior a{color:inherit}
+.new{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:16px 18px}
+.new ul{padding-left:18px;margin:0}.new li{margin:0 0 8px}
+.foot{color:var(--quiet);font-size:14.5px}.foot a{color:inherit}
+kbd{font:600 13px "Source Sans 3",sans-serif;border:1px solid var(--rule);border-bottom-width:2px;border-radius:5px;padding:0 5px;background:var(--panel)}
+@media(max-width:600px){.floor{font-size:17px}#dial{width:104px;height:104px}}
+</style>
+</head>
+<body>
+<header class="band head">
+  <h1>İki katlı oda</h1>
+  <p class="lead">Bir düğümün dallanmış örtüsünün içindesin. Oda katlardan oluşuyor; ortada havada asılı duran düğümün içinden geçen her adım ve her ışın seni bir sonraki kata taşıyor. İki katta, bir ipliğin etrafında bir tur seni öbür kata götürür, iki tur başa döndürür. Kat sayısını 5'e kadar artırabilirsin.</p>
+</header>
+<main class="band" style="padding-top:8px">
+  <div class="stage" id="stage" tabindex="0" role="img" aria-label="Katlı odanın birinci şahıs görünümü; köşede düğümün ve yolunun dışarıdan görünümü">
+    <div class="flash" id="flash"></div>
+    <div class="floor" id="floor">1. kat<small>mavi</small></div>
+    <div class="outcap" id="outcap">dışarıdan: düğüm, perde ve yolun</div>
+    <svg id="dial" viewBox="0 0 132 132" aria-hidden="true"></svg>
+    <div class="tip" id="tip">Sürükle: etrafa bak · <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> ya da oklar: yürü · <kbd>Q</kbd> <kbd>E</kbd>: alçal / yüksel</div>
+    <div class="touch"><button id="tUp" aria-label="Yüksel">yukarı</button><button id="tFwd" aria-label="İleri yürü">ileri</button><button id="tBack" aria-label="Geri yürü">geri</button><button id="tDown" aria-label="Alçal">aşağı</button></div>
+    <div id="glerr" hidden>Bu tarayıcıda 3B görünüm açılamadı.</div>
+  </div>
+  <div class="bar" role="toolbar" aria-label="Oda ayarları">
+    <span class="lab">Düğüm</span><button data-k="circle" aria-pressed="true">Çember</button><button data-k="trefoil" aria-pressed="false">Yonca 3₁</button><button data-k="fig8" aria-pressed="false">Sekiz 4₁</button>
+    <span class="sep"></span>
+    <span class="lab">Kat</span><button data-n="2" aria-pressed="true">2</button><button data-n="3" aria-pressed="false">3</button><button data-n="4" aria-pressed="false">4</button><button data-n="5" aria-pressed="false">5</button>
+    <span class="sep"></span>
+    <button id="tour">Otomatik tur</button><button id="veil" aria-pressed="false">Perdeyi göster</button><button id="reset">Başa dön</button><button id="vr" hidden>VR'de aç</button>
+  </div>
+  <div class="math" aria-live="polite">
+    <div><p class="big" id="mName"></p><p class="q" id="mSub"></p></div>
+    <div><p id="mH1"></p><p class="q" id="mFox"></p></div>
+  </div>
+  <p class="vrbox" id="vrnote">VR: Gözlükte açmak için bu sayfanın kendi adresinden açılması gerekiyor; claude.ai içindeki korumalı çerçeve gözlüğe izin vermeyebilir. Bu durumda aynı sayfanın tek dosyalık sürümü, gözlüğün tarayıcısında açıldığında "VR'de aç" düğmesini gösterir.</p>
+  <div class="cols">
+    <section>
+      <h2>Ne görüyorsun</h2>
+      <p>Her kat aynı odanın bir kopyası; rengi ve eşyaları farklı. Düğüme bakınca halkalarının içinde başka bir katın duvarlarını görürsün, çünkü oraya giden ışın perdeden geçip kat değiştiriyor. Düğüm bütün katlarda aynı yerde; katlar onun üstünde birleşiyor.</p>
+      <p>Köşedeki küçük pencere aşağıdaki uzayı gösteriyor: düğüm, perde ve senin yolun. Yol, o anda bulunduğun katın rengine boyanıyor.</p>
+    </section>
+    <section>
+      <h2>Deneyler</h2>
+      <ol>
+        <li>Çember seçiliyken halkanın içinden yürü: kat değişir. Halkanın yanından geç: değişmez. Bu, Thurston'ın telden geçidi.</li>
+        <li>Otomatik tur: kamera bir ipliğin etrafında n tur atıyor. Sol alttaki gösterge dönülen açıyı ve katları çiziyor: n katta başa dönmek için n · 360° gerekiyor.</li>
+        <li>Yoncada lobların içine bak. Ortadaki üçgende ışın perdeyi iki kez geçiyor; 2 katta yeniden kendi katını görürsün, 3 katta ise üçüncü katı.</li>
+        <li>Perdeyi göster: ışının geçtiği her perde katmanı görüntüyü biraz açar. Perde başka bir yüzey de olabilirdi; gördüğün katlar değişmezdi.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Neden böyle</h2>
+      <p>Bu oda, düğümün n katlı döngüsel dallanmış örtüsü Σₙ'nin içi. Bir ipliğin etrafında tek tur seni bir kat ileri taşır; n tur başa döndürür. Bu yüzden ipliğin etrafındaki tam açı n · 360°.</p>
+      <p class="formula">kat = (geçilen perde sayısı, yönüyle) mod n</p>
+      <p>Perde, düğümün sınırladığı herhangi bir yüzey; burada düğümün bir noktasından çekilmiş koni yüzeyi. İki katlı oda yonca için L(3, 1) mercek uzayının, sekiz düğümü için L(5, 2)'nin iki top çıkarılmış hali: odanın dışı n ayrı kopya olarak kalıyor.</p>
+    </section>
+  </div>
+  <div class="prior">
+    <section>
+      <h2>Önce yapılanlar</h2>
+      <ul>
+        <li><b>Bill Thurston, "Knots to Narnia"</b> (1992, Berkeley). Thurston telden bir düğümü geçit gibi tutup içinden geçiyor: sınır eğrisinin etrafında iki tur atan, başladığı dünyaya döner. Tony Phillips'in kaydettiği "Knots to a Mathematician" serisinde: <a href="https://www.math.stonybrook.edu/Videos/knots">video listesi</a>, <a href="https://www.youtube.com/watch?v=IKSrBt2kFD4">YouTube</a>.</li>
+        <li><b>Geometry Center, "Not Knot"</b> (1991). Düğüm tümleyenlerinin hiperbolik geometrisine bilgisayar animasyonuyla bir tur; yazarları arasında Thurston da var. <a href="https://www.cs.ubc.ca/~tmm/gc">Geometry Center videoları</a>.</li>
+        <li><b>W. P. Thurston, "How to see 3-manifolds"</b> (1998). 3-manifoldların "nasıl göründüğü" üzerine. <a href="https://homepages.warwick.ac.uk/~masgar/Maths/1998how_to_see_three-manifolds.pdf">PDF</a>.</li>
+        <li><b>Jeff Weeks, Curved Spaces.</b> Kapalı 3-manifoldlar için bir uçuş simülatörü. <a href="https://www.geometrygames.org/CurvedSpaces/">geometrygames.org</a>.</li>
+        <li><b>V. Hart, A. Hawksley, E. Matsumoto, H. Segerman, "Non-euclidean virtual reality"</b> (2017). Hiperbolik uzayı VR'de içeriden gezmek. <a href="https://arxiv.org/abs/1702.04004">arXiv</a>.</li>
+        <li><b>R. Coulon, E. Matsumoto, H. Segerman, S. Trettel, "Ray-marching Thurston geometries"</b> (2022). Thurston'ın sekiz geometrisinin gerçek zamanlı iç görünümleri, bazıları VR'de. <a href="https://arxiv.org/abs/2010.15801">arXiv</a>.</li>
+        <li><b>SnapPy, inside view</b> (M. Goerner, S. Schleimer, H. Segerman). Hiperbolik 3-manifoldları ışın izlemeyle içeriden göstermek. <a href="https://snappy.computop.org">SnapPy</a>.</li>
+        <li><b>Moritz L. Sümmermann, KnotPortal</b> (2020). Thurston'ın fikrini VR'ye taşıyan program: Unity ile yazılmış, perde yine bir koni, örtüler mertebe 2 ile sınırlı, dünyalar bir grubun elemanlarıyla etiketli (yonca için D₃). <a href="https://arxiv.org/abs/2001.02927">arXiv</a>, <a href="https://imaginary.org/program/knotportal">indir</a>.</li>
+      </ul>
+    </section>
+    <section class="new">
+      <h2>Bu sayfada farklı olan</h2>
+      <ul>
+        <li><b>Kurulum yok.</b> Tarayıcıda çalışıyor; aynı sayfa VR gözlüğünde de açılıyor.</li>
+        <li><b>n katlı örtüler.</b> 2'den 5'e kadar kat: bir ipliğin etrafında n tur atınca başa dönüyorsun. Kat, perdeyi hangi yönde geçtiğine göre hesaplanıyor.</li>
+        <li><b>Odanın matematiği canlı.</b> Seçtiğin düğüm ve n için |H₁(Σₙ)| Fox formülüyle hesaplanıyor; n = 2'de bu, önceki notlardaki determinant.</li>
+        <li><b>İçeriyle dışarı yan yana.</b> Köşedeki pencere aşağıdaki uzayda düğümü, perdeyi ve senin yolunu kat renkleriyle gösteriyor.</li>
+        <li><b>Açı göstergesi.</b> Turda dönülen açı ve kat değişimleri canlı çiziliyor.</li>
+      </ul>
+    </section>
+  </div>
+</main>
+<footer class="band foot"><p>Önceki sayfalar: <a href="https://claude.ai/artifact/8QSRfiFchbQLZgras4ssqs">Düğümden 3-manifolda</a> · <a href="https://claude.ai/artifact/DRbFwLisJpySsJDv3WgkW5">Ders Notu 3</a>.</p></footer>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
+<script type="module">
+import * as THREE from 'three';
+// room_core.js — knot curves and the sheet bookkeeping for the two-storey room.
+// The cut surface is the cone from the knot's first vertex to every edge (a 2-chain
+// with boundary the knot); crossing it an odd number of times switches the sheet.
+const NK = 96;
+const KC = [0, 1.75, 0];            // knot centre in the room (y is up)
+const sub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+const norm = a => { const l = Math.hypot(a[0], a[1], a[2]) || 1; return [a[0] / l, a[1] / l, a[2] / l]; };
+
+function raw(kind, t) {
+  if (kind === 'circle') return [1.15 * Math.sin(t), 1.15 * Math.cos(t), 0];
+  if (kind === 'trefoil') { const s = 0.48; return [s * (Math.sin(t) + 2 * Math.sin(2 * t)), s * (Math.cos(t) - 2 * Math.cos(2 * t)), -s * 1.2 * Math.sin(3 * t)]; }
+  const s = 0.46, w = 2 + Math.cos(2 * t);   // figure-eight
+  return [s * w * Math.cos(3 * t), s * w * Math.sin(3 * t), s * 1.3 * Math.sin(4 * t)];
+}
+function knotPoints(kind) {
+  const M = 2000, P = [], L = [0];
+  for (let i = 0; i <= M; i++) P.push(raw(kind, 2 * Math.PI * i / M));
+  for (let i = 1; i <= M; i++) L.push(L[i - 1] + Math.hypot(...sub(P[i], P[i - 1])));
+  const out = []; let j = 0;
+  for (let k = 0; k < NK; k++) {
+    const s = L[M] * k / NK;
+    while (L[j + 1] < s) j++;
+    const f = (s - L[j]) / (L[j + 1] - L[j]);
+    out.push([KC[0] + P[j][0] + f * (P[j + 1][0] - P[j][0]), KC[1] + P[j][1] + f * (P[j + 1][1] - P[j][1]), KC[2] + P[j][2] + f * (P[j + 1][2] - P[j][2])]);
+  }
+  return out;
+}
+// Moller-Trumbore with half-open edge rules so a shared fan edge counts once.
+function triHit(o, d, v0, v1, v2) {
+  const e1 = sub(v1, v0), e2 = sub(v2, v0), p = cross(d, e2), det = dot(e1, p);
+  if (Math.abs(det) < 1e-12) return -1;
+  const inv = 1 / det, s = sub(o, v0), u = dot(s, p) * inv;
+  if (u <= 0 || u > 1) return -1;
+  const q = cross(s, e1), v = dot(d, q) * inv;
+  if (v < 0 || u + v > 1) return -1;
+  return dot(e2, q) * inv;
+}
+// Signed crossings of the segment a -> b with the cut surface (orientation from the knot).
+function triHitS(o, d, v0, v1, v2) {
+  const e1 = sub(v1, v0), e2 = sub(v2, v0), p = cross(d, e2), det = dot(e1, p);
+  if (Math.abs(det) < 1e-12) return null;
+  const inv = 1 / det, s = sub(o, v0), u = dot(s, p) * inv;
+  if (u <= 0 || u > 1) return null;
+  const q = cross(s, e1), v = dot(d, q) * inv;
+  if (v < 0 || u + v > 1) return null;
+  return [dot(e2, q) * inv, det > 0 ? 1 : -1];
+}
+function segSigned(a, b, K) {
+  const d = sub(b, a); let c = 0;
+  for (let i = 1; i < NK - 1; i++) { const h = triHitS(a, d, K[0], K[i], K[i + 1]); if (h && h[0] >= 0 && h[0] < 1) c += h[1]; }
+  return c;
+}
+// Alexander polynomials (coefficients from t^0) and Fox's formula for |H1| of the n-fold cyclic branched cover.
+const ALEX = { circle: [1], trefoil: [1, -1, 1], fig8: [1, -3, 1] };
+function h1Order(kind, n) {
+  let re = 1, im = 0;
+  for (let k = 1; k < n; k++) {
+    let a = 0, b = 0;
+    ALEX[kind].forEach((c, i) => { a += c * Math.cos(2 * Math.PI * k * i / n); b += c * Math.sin(2 * Math.PI * k * i / n); });
+    [re, im] = [re * a - im * b, re * b + im * a];
+  }
+  const m = Math.hypot(re, im);
+  return m < 1e-6 ? Infinity : Math.round(m);
+}
+// Parity of crossings of the segment a -> b with the cut surface.
+function segParity(a, b, K) {
+  const d = sub(b, a); let c = 0;
+  for (let i = 1; i < NK - 1; i++) { const t = triHit(a, d, K[0], K[i], K[i + 1]); if (t >= 0 && t < 1) c++; }
+  return c & 1;
+}
+function distToKnot(p, K) {
+  let best = 1e9;
+  for (let i = 0; i < NK; i++) {
+    const a = K[i], b = K[(i + 1) % NK], ab = sub(b, a), ap = sub(p, a);
+    const t = Math.max(0, Math.min(1, dot(ap, ab) / dot(ab, ab)));
+    best = Math.min(best, Math.hypot(ap[0] - t * ab[0], ap[1] - t * ab[1], ap[2] - t * ab[2]));
+  }
+  return best;
+}
+// A loop around one strand: the strand point farthest from the rest of the knot.
+function tourSetup(K) {
+  let best = null;
+  for (let i = 0; i < NK; i++) {
+    let m = 1e9;
+    for (let j = 0; j < NK; j++) { const dj = Math.min(Math.abs(i - j), NK - Math.abs(i - j)); if (dj > NK / 8) m = Math.min(m, Math.hypot(...sub(K[i], K[j]))); }
+    const lowEnough = K[i][1] < 3.3 && K[i][1] > 0.6;
+    if (lowEnough && (!best || m > best.m)) best = { i, m };
+  }
+  const c = K[best.i], T = norm(sub(K[(best.i + 1) % NK], K[(best.i + NK - 1) % NK]));
+  let N1 = cross(T, [0, 1, 0]); if (Math.hypot(...N1) < 0.2) N1 = cross(T, [1, 0, 0]); N1 = norm(N1);
+  const B = norm(cross(T, N1));
+  const R = Math.max(0.3, Math.min(0.75, 0.45 * best.m));
+  const S = { c, T, N1, B, R, th0: 0, dir: 1 };
+  // start half a turn away from where the loop crosses the cut surface
+  for (let i = 1; i <= 720; i++) {
+    const sg = segSigned(tourPoint(S, 2 * Math.PI * (i - 1) / 720), tourPoint(S, 2 * Math.PI * i / 720), K);
+    if (sg) { S.th0 = 2 * Math.PI * i / 720 + Math.PI; S.dir = sg > 0 ? 1 : -1; break; }
+  }
+  return S;
+}
+function tourPoint(S, th) {
+  const a = Math.cos(th) * S.R, b = Math.sin(th) * S.R;
+  return [S.c[0] + a * S.N1[0] + b * S.B[0], S.c[1] + a * S.N1[1] + b * S.B[1], S.c[2] + a * S.N1[2] + b * S.B[2]];
+}
+
+{
+const $ = id => document.getElementById(id);
+const stage = $('stage');
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const FLOORS = [['mavi', '#4f86c6'], ['turuncu', '#e0894a'], ['yeşil', '#3f9d57'], ['mor', '#8a62c9'], ['sarı', '#c9a227']];
+let renderer = null;
+try { renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: 'high-performance' }); } catch (e) { renderer = null; }
+if (!renderer) $('glerr').hidden = false;
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(70, 1, 0.05, 200);
+camera.rotation.order = 'YXZ';
+const rig = new THREE.Group(); rig.add(camera); scene.add(rig);
+
+const FRAG = `
+#define N ${NK}
+uniform vec3 uK[N];
+uniform int uSheet;
+uniform int uN;
+uniform float uVeil;
+uniform vec3 uHead;
+uniform vec4 uBound;
+uniform vec4 uFlash;
+varying vec3 vWorld;
+const vec3 RMIN = vec3(-7.0, 0.0, -7.0), RMAX = vec3(7.0, 4.2, 7.0);
+const vec3 WALL[5] = vec3[5](vec3(0.60, 0.75, 0.96), vec3(1.0, 0.72, 0.46), vec3(0.62, 0.88, 0.60), vec3(0.80, 0.68, 0.97), vec3(0.98, 0.90, 0.50));
+const vec3 LINE[5] = vec3[5](vec3(0.14, 0.28, 0.56), vec3(0.55, 0.26, 0.10), vec3(0.14, 0.42, 0.18), vec3(0.36, 0.20, 0.58), vec3(0.52, 0.42, 0.06));
+const vec3 BAND[5] = vec3[5](vec3(0.16, 0.36, 0.78), vec3(0.80, 0.30, 0.12), vec3(0.16, 0.58, 0.24), vec3(0.50, 0.28, 0.80), vec3(0.82, 0.64, 0.08));
+const vec3 FLA[5] = vec3[5](vec3(0.85, 0.91, 0.99), vec3(1.0, 0.88, 0.74), vec3(0.86, 0.97, 0.84), vec3(0.93, 0.88, 1.0), vec3(1.0, 0.97, 0.80));
+const vec3 FLB[5] = vec3[5](vec3(0.42, 0.58, 0.84), vec3(0.92, 0.58, 0.32), vec3(0.42, 0.74, 0.44), vec3(0.62, 0.48, 0.86), vec3(0.88, 0.76, 0.30));
+vec3 triT(vec3 o, vec3 d, vec3 v0, vec3 v1, vec3 v2) {
+  vec3 e1 = v1 - v0, e2 = v2 - v0, p = cross(d, e2); float det = dot(e1, p);
+  if (abs(det) < 1e-10) return vec3(-1.0);
+  float inv = 1.0 / det; vec3 s = o - v0; float u = dot(s, p) * inv;
+  if (u <= 0.0 || u > 1.0) return vec3(-1.0);
+  vec3 q = cross(s, e1); float v = dot(d, q) * inv;
+  if (v < 0.0 || u + v > 1.0) return vec3(-1.0);
+  return vec3(dot(e2, q) * inv, det > 0.0 ? 1.0 : -1.0, 0.0);
+}
+float capT(vec3 ro, vec3 rd, vec3 pa, vec3 pb, float r) {
+  vec3 ba = pb - pa, oa = ro - pa;
+  float baba = dot(ba, ba), bard = dot(ba, rd), baoa = dot(ba, oa), rdoa = dot(rd, oa), oaoa = dot(oa, oa);
+  float a = baba - bard * bard, b = baba * rdoa - baoa * bard, c = baba * oaoa - baoa * baoa - r * r * baba;
+  float h = b * b - a * c;
+  if (h >= 0.0) {
+    float t = (-b - sqrt(h)) / a; float y = baoa + t * bard;
+    if (y > 0.0 && y < baba) return t;
+    vec3 oc = (y <= 0.0) ? oa : ro - pb; b = dot(rd, oc); c = dot(oc, oc) - r * r; h = b * b - c;
+    if (h > 0.0) return -b - sqrt(h);
+  }
+  return -1.0;
+}
+vec2 sphI(vec3 ro, vec3 rd, vec3 c, float r) { vec3 oc = ro - c; float b = dot(oc, rd), h = b * b - dot(oc, oc) + r * r; if (h < 0.0) return vec2(1e9, -1e9); h = sqrt(h); return vec2(-b - h, -b + h); }
+vec2 boxI(vec3 ro, vec3 rd, vec3 mn, vec3 mx) { vec3 t1 = (mn - ro) / rd, t2 = (mx - ro) / rd; vec3 a = min(t1, t2), b = max(t1, t2); float n = max(max(a.x, a.y), a.z), f = min(min(b.x, b.y), b.z); return (n > f) ? vec2(1e9, -1e9) : vec2(n, f); }
+vec2 objI(int id, vec3 ro, vec3 rd) {
+  if (id == 0) return sphI(ro, rd, vec3(-4.0, 0.8, -4.0), 0.8);
+  if (id == 1) return boxI(ro, rd, vec3(-4.4, 0.0, -4.4), vec3(-3.6, 3.0, -3.6));
+  if (id == 2) return sphI(ro, rd, vec3(3.2, 0.5, 4.2), 0.5);
+  if (id == 3) return sphI(ro, rd, vec3(4.0, 1.0, 4.0), 1.0);
+  if (id == 4) return boxI(ro, rd, vec3(4.1, 0.0, -3.9), vec3(4.9, 2.8, -3.1));
+  return boxI(ro, rd, vec3(-4.6, 0.0, 2.9), vec3(-3.4, 1.2, 4.1));
+}
+vec3 objN(int id, vec3 p) {
+  if (id == 0) return normalize(p - vec3(-4.0, 0.8, -4.0));
+  if (id == 2) return normalize(p - vec3(3.2, 0.5, 4.2));
+  if (id == 3) return normalize(p - vec3(4.0, 1.0, 4.0));
+  vec3 c = id == 1 ? vec3(-4.0, 1.5, -4.0) : id == 4 ? vec3(4.5, 1.4, -3.5) : vec3(-4.0, 0.6, 3.5);
+  vec3 h = id == 1 ? vec3(0.4, 1.5, 0.4) : id == 4 ? vec3(0.4, 1.4, 0.4) : vec3(0.6, 0.6, 0.6);
+  vec3 q = (p - c) / h, aq = abs(q);
+  return aq.x > aq.y && aq.x > aq.z ? vec3(sign(q.x), 0.0, 0.0) : aq.y > aq.z ? vec3(0.0, sign(q.y), 0.0) : vec3(0.0, 0.0, sign(q.z));
+}
+vec3 objC(int id) {
+  if (id == 0) return vec3(0.22, 0.74, 0.70);
+  if (id == 1) return vec3(0.56, 0.36, 0.76);
+  if (id == 2) return vec3(0.28, 0.52, 0.92);
+  if (id == 3) return vec3(0.88, 0.30, 0.25);
+  if (id == 4) return vec3(0.20, 0.32, 0.62);
+  return vec3(0.96, 0.68, 0.24);
+}
+float gridLine(float x, float w) { float f = abs(fract(x) - 0.5); return smoothstep(0.5 - w, 0.5, f); }
+vec3 wallColor(vec3 p, vec3 n, int s) {
+  if (n.y > 0.5) return mix(FLA[s], FLB[s], mod(floor(p.x) + floor(p.z), 2.0));
+  if (n.y < -0.5) return WALL[s] * 1.06;
+  vec2 uv = abs(n.x) > 0.5 ? p.zy : p.xy;
+  float g = max(gridLine(uv.x, 0.03), gridLine(uv.y, 0.03));
+  vec3 col = mix(WALL[s], LINE[s], 0.55 * g);
+  if (p.y > 1.0 && p.y < 1.25) col = BAND[s];
+  return col;
+}
+int wrap(int s) { return ((s % uN) + uN) % uN; }
+void main() {
+  vec3 ro = cameraPosition, rd = normalize(vWorld - cameraPosition);
+  int sh = uSheet;
+  vec3 he = ro - uHead;
+  if (dot(he, he) > 1e-8) { int c = 0; for (int i = 1; i < N - 1; i++) { vec3 h = triT(uHead, he, uK[0], uK[i], uK[i + 1]); if (h.x >= 0.0 && h.x < 1.0) c += int(h.y); } sh = wrap(sh + c); }
+  vec3 tt = (mix(RMIN, RMAX, step(0.0, rd)) - ro) / rd;
+  float tWall = min(tt.x, min(tt.y, tt.z));
+  vec3 nWall = tWall == tt.x ? vec3(-sign(rd.x), 0.0, 0.0) : tWall == tt.y ? vec3(0.0, -sign(rd.y), 0.0) : vec3(0.0, 0.0, -sign(rd.z));
+  float tK = 1e9; vec3 kA = vec3(0.0), kB = vec3(0.0);
+  float cr[24]; float sg[24]; int nc = 0;
+  vec3 oc = ro - uBound.xyz; float bb = dot(oc, rd), cc = dot(oc, oc) - uBound.w * uBound.w, hh = bb * bb - cc;
+  if (hh > 0.0 && -bb + sqrt(hh) > 0.0) {
+    for (int i = 0; i < N; i++) { vec3 a = uK[i], b = uK[(i + 1) % N]; float t = capT(ro, rd, a, b, 0.045); if (t > 0.0 && t < tK) { tK = t; kA = a; kB = b; } }
+    for (int i = 1; i < N - 1; i++) { vec3 h = triT(ro, rd, uK[0], uK[i], uK[i + 1]); if (h.x > 0.0 && h.x < tWall && nc < 24) { cr[nc] = h.x; sg[nc] = h.y; nc++; } }
+  }
+  for (int i = 1; i < 24; i++) { if (i >= nc) break; float x = cr[i], y = sg[i]; int j = i - 1; while (j >= 0 && cr[j] > x) { cr[j + 1] = cr[j]; sg[j + 1] = sg[j]; j--; } cr[j + 1] = x; sg[j + 1] = y; }
+  float a0 = 0.0, hitT = tWall; int hitSh = sh, hitId = -1, before = 0;
+  for (int k = 0; k <= 24; k++) {
+    float b1 = k < nc ? cr[k] : tWall;
+    float best = 1e9; int bid = -1;
+    for (int id = 0; id < 6; id++) { if (id % uN != sh) continue; vec2 iv = objI(id, ro, rd); if (iv.y > a0 && iv.x < b1) { float t = max(iv.x, a0); if (t < best) { best = t; bid = id; } } }
+    if (bid >= 0) { hitT = best; hitId = bid; hitSh = sh; before = k; break; }
+    if (k >= nc) { hitT = tWall; hitSh = sh; before = k; break; }
+    a0 = b1; sh = wrap(sh + int(sg[k]));
+  }
+  vec3 col; vec3 light = vec3(0.0, 3.9, 0.0);
+  if (tK < hitT) {
+    vec3 p = ro + tK * rd, ba = kB - kA; float h = clamp(dot(p - kA, ba) / dot(ba, ba), 0.0, 1.0);
+    vec3 n = normalize(p - (kA + h * ba));
+    float dif = max(dot(n, normalize(light - p)), 0.0), rim = pow(1.0 - max(dot(n, -rd), 0.0), 2.0);
+    col = vec3(1.0, 0.86, 0.55) * (0.55 + 0.45 * dif) + 0.35 * rim;
+    before = 0; for (int i = 0; i < 24; i++) { if (i >= nc) break; if (cr[i] < tK) before++; }
+  } else {
+    vec3 p = ro + hitT * rd;
+    vec3 n = hitId >= 0 ? objN(hitId, p) : nWall;
+    if (hitId >= 0 && dot(n, rd) > 0.0) n = -rd;
+    vec3 base = hitId >= 0 ? objC(hitId) : wallColor(p, n, hitSh);
+    vec3 L = light - p; float d = length(L);
+    float dif = max(dot(n, L / d), 0.0) * (1.0 / (1.0 + 0.04 * d * d));
+    col = base * (0.5 + 0.75 * dif);
+    col = mix(col, col * 0.82, smoothstep(6.0, 16.0, hitT));
+  }
+  if (uVeil > 0.5) col = mix(col, vec3(0.80, 0.97, 1.0), 1.0 - pow(0.8, float(before)));
+  col = mix(col, uFlash.rgb, uFlash.a);
+  gl_FragColor = vec4(pow(col, vec3(0.95)), 1.0);
+}`;
+const VERT = `varying vec3 vWorld; void main() { vec4 w = modelMatrix * vec4(position, 1.0); vWorld = w.xyz; gl_Position = projectionMatrix * viewMatrix * w; }`;
+const uniforms = { uK: { value: Array.from({ length: NK }, () => new THREE.Vector3()) }, uSheet: { value: 0 }, uN: { value: 2 }, uVeil: { value: 0 }, uHead: { value: new THREE.Vector3() }, uBound: { value: new THREE.Vector4() }, uFlash: { value: new THREE.Vector4(0, 0, 0, 0) } };
+const sky = new THREE.Mesh(new THREE.SphereGeometry(60, 32, 16), new THREE.ShaderMaterial({ vertexShader: VERT, fragmentShader: FRAG, uniforms, side: THREE.BackSide, depthWrite: false }));
+sky.frustumCulled = false; scene.add(sky);
+
+// in-VR floor panel, attached to the view
+const hudCanvas = document.createElement('canvas'); hudCanvas.width = 512; hudCanvas.height = 128;
+const hudTex = new THREE.CanvasTexture(hudCanvas);
+const hud = new THREE.Mesh(new THREE.PlaneGeometry(0.32, 0.08), new THREE.MeshBasicMaterial({ map: hudTex, transparent: true, depthTest: false }));
+hud.position.set(-0.16, -0.17, -0.6); hud.renderOrder = 10; hud.visible = false; camera.add(hud);
+function drawHud() {
+  const g = hudCanvas.getContext('2d'), [nm, col] = FLOORS[st.sheet];
+  g.clearRect(0, 0, 512, 128); g.fillStyle = col; g.beginPath(); g.roundRect(0, 0, 512, 128, 28); g.fill();
+  g.fillStyle = '#fff'; g.font = '600 60px Georgia, serif'; g.fillText(`${st.sheet + 1}. kat · ${nm}`, 28, 84); hudTex.needsUpdate = true;
+}
+
+// ---------- outside view (the space downstairs) ----------
+const scene2 = new THREE.Scene(); scene2.background = new THREE.Color(0x0e1620);
+const cam2 = new THREE.PerspectiveCamera(36, 1.3, 0.1, 100);
+scene2.add(new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(14, 4.2, 14)).translate(0, 2.1, 0), new THREE.LineBasicMaterial({ color: 0x8fa3b8 })));
+const grid2 = new THREE.GridHelper(14, 14, 0x4a5d70, 0x2c3b4a); scene2.add(grid2);
+const knot2 = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial({ color: 0xffdb8c })); scene2.add(knot2);
+const veil2 = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial({ color: 0x9fdfff, transparent: true, opacity: 0.22, side: THREE.DoubleSide, depthWrite: false })); scene2.add(veil2);
+const me2 = new THREE.Mesh(new THREE.SphereGeometry(0.28, 20, 14), new THREE.MeshBasicMaterial({ color: 0x4f86c6 })); scene2.add(me2);
+const look2 = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]), new THREE.LineBasicMaterial({ color: 0xffffff })); scene2.add(look2);
+const TRMAX = 3000, trailPos = new Float32Array(TRMAX * 3), trailCol = new Float32Array(TRMAX * 3);
+const trailGeo = new THREE.BufferGeometry(); trailGeo.setAttribute('position', new THREE.BufferAttribute(trailPos, 3)); trailGeo.setAttribute('color', new THREE.BufferAttribute(trailCol, 3)); trailGeo.setDrawRange(0, 0);
+const trail2 = new THREE.Line(trailGeo, new THREE.LineBasicMaterial({ vertexColors: true })); trail2.frustumCulled = false; scene2.add(trail2);
+let trailN = 0;
+function pushTrail(p, s) {
+  if (trailN > 0) { const i = 3 * (trailN - 1); if (Math.hypot(p[0] - trailPos[i], p[1] - trailPos[i + 1], p[2] - trailPos[i + 2]) < 0.04) return; }
+  if (trailN >= TRMAX) { trailPos.copyWithin(0, 3); trailCol.copyWithin(0, 3); trailN--; }
+  const c = new THREE.Color(FLOORS[s][1]); trailPos.set(p, 3 * trailN); trailCol.set([c.r, c.g, c.b], 3 * trailN); trailN++;
+  trailGeo.setDrawRange(0, trailN); trailGeo.attributes.position.needsUpdate = true; trailGeo.attributes.color.needsUpdate = true;
+}
+
+// ---------- state ----------
+const st = { kind: 'circle', n: 2, K: null, sheet: 0, pos: [0, 1.65, 3.8], yaw: 0, pitch: 0, tour: null, keys: {}, hold: {}, headPrev: null };
+const NAMES = {
+  circle: { title: 'Çember', ln: n => 'S³', note: 'Düğümsüz çemberin her döngüsel örtüsü yine S³; düğüm yok, homoloji yok.' },
+  trefoil: { title: 'Yonca 3₁', ln: n => ({ 2: 'L(3, 1) mercek uzayı', 3: 'S³/Q₈, kuaterniyon uzayı', 4: 'Brieskorn küresi Σ(2, 3, 4)', 5: 'Poincaré homoloji küresi Σ(2, 3, 5)' })[n], note: 'Yonca T(2, 3) torus düğümü olduğu için Σₙ, Brieskorn manifoldu Σ(2, 3, n).' },
+  fig8: { title: 'Sekiz 4₁', ln: n => ({ 2: 'L(5, 2) mercek uzayı', 3: 'Hantzsche–Wendt düz manifoldu' })[n], note: '' }
+};
+const ALEXT = { circle: 'Δ(t) = 1', trefoil: 'Δ(t) = t² − t + 1', fig8: 'Δ(t) = t² − 3t + 1' };
+function mathPanel() {
+  const { kind, n } = st, h = h1Order(kind, n), nm = NAMES[kind].ln(n);
+  $('mName').textContent = `Σ${'₀₁₂₃₄₅'[n]}(${NAMES[kind].title})${nm ? ' = ' + nm : ''}`;
+  $('mSub').textContent = `${n} katlı döngüsel dallanmış örtü · bir ipliğin etrafında ${n} tur = ${n * 360}° başa döndürür. ${NAMES[kind].note}`;
+  const grp = kind === 'trefoil' && n === 3 ? ' (Z/2 ⊕ Z/2)' : kind === 'fig8' && n === 3 ? ' (Z/4 ⊕ Z/4)' : '';
+  $('mH1').innerHTML = `|H₁(Σ${'₀₁₂₃₄₅'[n]})| = <b>${h === Infinity ? '∞' : h}</b>${grp}${n === 2 ? ` = det(${NAMES[kind].title.split(' ').pop()})` : ''}`;
+  $('mFox').textContent = `${ALEXT[kind]} · Fox formülü: |H₁(Σₙ)| = |Δ(ω)Δ(ω²)⋯Δ(ωⁿ⁻¹)|, ω = e^(2πi/n). n = 2'de |Δ(−1)| = determinant.`;
+}
+function setKnot(kind) {
+  st.kind = kind; st.K = knotPoints(kind);
+  st.K.forEach((p, i) => uniforms.uK.value[i].set(p[0], p[1], p[2]));
+  let r = 0; for (const p of st.K) r = Math.max(r, Math.hypot(p[0] - KC[0], p[1] - KC[1], p[2] - KC[2]));
+  uniforms.uBound.value.set(KC[0], KC[1], KC[2], r + 0.1);
+  const v = st.K.map(p => new THREE.Vector3(...p));
+  knot2.geometry.dispose(); knot2.geometry = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(v, true), 300, 0.07, 8, true);
+  const fan = []; for (let i = 1; i < NK - 1; i++) fan.push(...st.K[0], ...st.K[i], ...st.K[i + 1]);
+  veil2.geometry.dispose(); const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(fan, 3)); veil2.geometry = g;
+  document.querySelectorAll('[data-k]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.k === kind)));
+  reset(); mathPanel();
+}
+function setN(n) { st.n = n; uniforms.uN.value = n; document.querySelectorAll('[data-n]').forEach(b => b.setAttribute('aria-pressed', String(Number(b.dataset.n) === n))); reset(); mathPanel(); }
+function reset() {
+  stopTour(true); st.sheet = 0; st.pos = [0, 1.65, 3.8]; st.yaw = 0; st.pitch = 0; trailN = 0; trailGeo.setDrawRange(0, 0);
+  if (renderer && renderer.xr.isPresenting) { rig.position.set(0, 0, 3.8); rig.rotation.set(0, 0, 0); st.headPrev = null; }
+  showSheet(false);
+}
+let flashT = 0;
+function showSheet(flash = true) {
+  const [nm, col] = FLOORS[st.sheet], f = $('floor');
+  f.style.background = col; f.innerHTML = `${st.sheet + 1}. kat<small>${nm} · ${st.n} katlı oda</small>`;
+  uniforms.uSheet.value = st.sheet; me2.material.color.set(col); drawHud();
+  if (flash && !reduce) { flashT = 1; uniforms.uFlash.value.set(...new THREE.Color(col).toArray(), 0.3); }
+}
+function moveTo(np) {
+  np = [Math.max(-6.6, Math.min(6.6, np[0])), Math.max(0.3, Math.min(3.9, np[1])), Math.max(-6.6, Math.min(6.6, np[2]))];
+  if (distToKnot(np, st.K) < 0.18) return false;
+  const s = segSigned(st.pos, np, st.K);
+  if (s) { st.sheet = (((st.sheet + s) % st.n) + st.n) % st.n; showSheet(); }
+  st.pos = np; pushTrail(np, st.sheet); return true;
+}
+
+// ---------- input ----------
+addEventListener('keydown', e => { const k = e.key.toLowerCase(); if (['w', 'a', 's', 'd', 'q', 'e', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(k)) { st.keys[k] = true; if (document.activeElement === stage) e.preventDefault(); stopTour(); } });
+addEventListener('keyup', e => { st.keys[e.key.toLowerCase()] = false; });
+let drag = null;
+stage.addEventListener('pointerdown', e => { if (e.target.closest('button')) return; drag = { x: e.clientX, y: e.clientY, id: e.pointerId }; stage.setPointerCapture(e.pointerId); stage.focus({ preventScroll: true }); });
+stage.addEventListener('pointermove', e => { if (!drag || e.pointerId !== drag.id) return; stopTour(); st.yaw -= (e.clientX - drag.x) * 0.005; st.pitch = Math.max(-1.45, Math.min(1.45, st.pitch - (e.clientY - drag.y) * 0.005)); drag.x = e.clientX; drag.y = e.clientY; });
+const endDrag = () => { drag = null; }; stage.addEventListener('pointerup', endDrag); stage.addEventListener('pointercancel', endDrag);
+for (const [id, k] of [['tFwd', 'w'], ['tBack', 's'], ['tUp', 'e'], ['tDown', 'q']]) {
+  const b = $(id);
+  b.addEventListener('pointerdown', e => { e.stopPropagation(); st.hold[k] = true; stopTour(); });
+  for (const ev of ['pointerup', 'pointerleave', 'pointercancel']) b.addEventListener(ev, () => { st.hold[k] = false; });
+}
+document.querySelectorAll('[data-k]').forEach(b => b.addEventListener('click', () => setKnot(b.dataset.k)));
+document.querySelectorAll('[data-n]').forEach(b => b.addEventListener('click', () => setN(Number(b.dataset.n))));
+$('reset').addEventListener('click', reset);
+$('veil').addEventListener('click', () => { const on = uniforms.uVeil.value < 0.5; uniforms.uVeil.value = on ? 1 : 0; $('veil').setAttribute('aria-pressed', String(on)); });
+function stopTour(quiet) {
+  if (!st.tour) return; st.tour = null; camera.up.set(0, 1, 0); $('tour').textContent = 'Otomatik tur';
+  if (!quiet) { const d = new THREE.Vector3(); camera.getWorldDirection(d); st.yaw = Math.atan2(-d.x, -d.z); st.pitch = Math.asin(Math.max(-1, Math.min(1, d.y))); }
+}
+$('tour').addEventListener('click', () => {
+  if (st.tour) { stopTour(); return; }
+  const S = tourSetup(st.K), start = tourPoint(S, S.th0);
+  st.tour = { S, phase: 'go', from: st.pos.slice(), to: start, t: 0, dur: Math.max(1.2, Math.hypot(start[0] - st.pos[0], start[1] - st.pos[1], start[2] - st.pos[2]) / 2.2), hist: [] };
+  $('tour').textContent = 'Turu durdur';
+});
+
+// ---------- dial ----------
+function drawDial() {
+  const d = $('dial'), T = st.tour;
+  if (!T || T.phase !== 'loop') { d.style.display = 'none'; return; }
+  d.style.display = 'block';
+  const total = 2 * Math.PI * st.n; let s = '<circle cx="66" cy="66" r="62" fill="#0e1620cc"/><circle cx="66" cy="66" r="50" fill="none" stroke="#ffffff22" stroke-width="10"/>';
+  for (let i = 1; i < T.hist.length; i++) {
+    const [a0] = T.hist[i - 1], [a1, sh] = T.hist[i], f0 = a0 / total, f1 = a1 / total;
+    const p = f => [66 + 50 * Math.sin(2 * Math.PI * f), 66 - 50 * Math.cos(2 * Math.PI * f)];
+    const [x0, y0] = p(f0), [x1, y1] = p(f1);
+    s += `<path d="M${x0.toFixed(1)} ${y0.toFixed(1)}A50 50 0 0 1 ${x1.toFixed(1)} ${y1.toFixed(1)}" fill="none" stroke="${FLOORS[sh][1]}" stroke-width="10"/>`;
+  }
+  const ang = T.hist.length ? T.hist[T.hist.length - 1][0] : 0;
+  s += `<text x="66" y="64" text-anchor="middle" font-size="20" font-weight="600" fill="#fff" font-family="Source Sans 3, sans-serif">${Math.round(ang * 180 / Math.PI)}°</text><text x="66" y="84" text-anchor="middle" font-size="12.5" fill="#cfd9e3" font-family="Source Sans 3, sans-serif">/ ${st.n * 360}°</text>`;
+  d.innerHTML = s;
+}
+
+// ---------- XR ----------
+const xrState = { snapReady: true };
+if (renderer && navigator.xr && navigator.xr.isSessionSupported) {
+  navigator.xr.isSessionSupported('immersive-vr').then(ok => {
+    if (!ok) return;
+    renderer.xr.enabled = true; renderer.xr.setFramebufferScaleFactor(0.75);
+    const b = $('vr'); b.hidden = false; $('vrnote').textContent = 'VR: "VR\'de aç" ile gözlüğe geç. Sol kol: yürü · sağ kol: dön (sağa sola), alçal / yüksel (ileri geri).';
+    b.addEventListener('click', async () => {
+      try {
+        const s = await navigator.xr.requestSession('immersive-vr', { optionalFeatures: ['local-floor'] });
+        renderer.xr.setReferenceSpaceType('local-floor'); await renderer.xr.setSession(s);
+        try { renderer.xr.setFoveation(1); } catch (e) {}
+        stopTour(true); rig.position.set(st.pos[0], 0, st.pos[2]); rig.rotation.set(0, st.yaw, 0); camera.rotation.set(0, 0, 0); hud.visible = true; st.headPrev = null;
+        s.addEventListener('end', () => { hud.visible = false; rig.rotation.set(0, 0, 0); st.headPrev = null; });
+      } catch (e) { b.textContent = 'VR açılamadı'; $('vrnote').textContent = 'VR oturumu açılamadı (' + (e && e.name || 'hata') + '). Bu çerçeve gözlüğe izin vermiyor olabilir; sayfanın tek dosyalık sürümünü gözlüğün tarayıcısında aç.'; }
+    });
+  }).catch(() => {});
+}
+function xrLocomotion(dt) {
+  const s = renderer.xr.getSession(); if (!s) return;
+  const head = new THREE.Vector3(); renderer.xr.getCamera().getWorldPosition(head);
+  const fwd = new THREE.Vector3(); renderer.xr.getCamera().getWorldDirection(fwd);
+  for (const src of s.inputSources) {
+    const gp = src.gamepad; if (!gp || gp.axes.length < 4) continue;
+    const ax = gp.axes[2], ay = gp.axes[3];
+    if (src.handedness === 'left' && (Math.abs(ax) > 0.15 || Math.abs(ay) > 0.15)) {
+      const right = new THREE.Vector3().crossVectors(fwd, new THREE.Vector3(0, 1, 0)).normalize();
+      const delta = fwd.clone().multiplyScalar(-ay * 1.6 * dt).add(right.multiplyScalar(ax * 1.6 * dt));
+      const np = head.clone().add(delta);
+      if (np.x > -6.6 && np.x < 6.6 && np.z > -6.6 && np.z < 6.6 && np.y > 0.3 && np.y < 3.9 && distToKnot([np.x, np.y, np.z], st.K) > 0.18) rig.position.add(delta);
+    }
+    if (src.handedness === 'right') {
+      if (Math.abs(ax) > 0.7 && xrState.snapReady) {
+        xrState.snapReady = false; const a = (ax > 0 ? -1 : 1) * Math.PI / 6;
+        const off = head.clone().sub(rig.position); rig.rotation.y += a; off.applyAxisAngle(new THREE.Vector3(0, 1, 0), a);
+        rig.position.copy(head.clone().sub(off));
+      }
+      if (Math.abs(ax) < 0.3) xrState.snapReady = true;
+      if (Math.abs(ay) > 0.2) { const np = head.y - ay * 1.0 * dt; if (np > 0.3 && np < 3.9) rig.position.y -= ay * 1.0 * dt; }
+    }
+  }
+}
+
+// ---------- loop ----------
+let scale = 1;
+function resize() {
+  if (!renderer) return;
+  const W = stage.clientWidth, H = stage.clientHeight;
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 1.5) * scale);
+  renderer.setSize(W, H, false); camera.aspect = W / Math.max(1, H); camera.updateProjectionMatrix();
+}
+if (renderer) { stage.insertBefore(renderer.domElement, stage.firstChild); new ResizeObserver(resize).observe(stage); }
+const ease = k => k < 0 ? 0 : k > 1 ? 1 : k * k * (3 - 2 * k);
+let last = performance.now(), slow = 0, fast = 0, orbit = 0;
+function frame(now) {
+  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  const xr = renderer && renderer.xr.isPresenting;
+  if (!xr) {
+    if (dt > 0.034) { slow++; fast = 0; } else if (dt < 0.02) { fast++; slow = 0; }
+    if (slow > 30 && scale > 0.5) { scale *= 0.8; slow = 0; resize(); }
+    if (fast > 240 && scale < 1) { scale = Math.min(1, scale / 0.8); fast = 0; resize(); }
+  }
+  if (flashT > 0) { flashT = Math.max(0, flashT - dt / 0.6); uniforms.uFlash.value.w = 0.3 * flashT; }
+  const T = st.tour;
+  if (xr) {
+    xrLocomotion(dt);
+    const hp = new THREE.Vector3(); renderer.xr.getCamera().getWorldPosition(hp);
+    const np = [hp.x, hp.y, hp.z];
+    if (st.headPrev) { const s = segSigned(st.headPrev, np, st.K); if (s) { st.sheet = (((st.sheet + s) % st.n) + st.n) % st.n; showSheet(); } }
+    st.headPrev = np; st.pos = np; pushTrail(np, st.sheet);
+    uniforms.uHead.value.copy(hp); sky.position.copy(hp);
+  } else if (T) {
+    if (T.phase === 'go') {
+      T.t += dt / T.dur; const k = ease(T.t);
+      moveTo([T.from[0] + (T.to[0] - T.from[0]) * k, T.from[1] + (T.to[1] - T.from[1]) * k, T.from[2] + (T.to[2] - T.from[2]) * k]);
+      if (T.t >= 1) { T.phase = 'loop'; T.t = 0; T.hist = [[0, st.sheet]]; }
+      $('tip').textContent = 'Tura başlamak için ipliğin yanına gidiliyor…';
+    } else {
+      T.t += dt / (9 * st.n); const k = Math.min(1, T.t), th = 2 * Math.PI * st.n * k;
+      moveTo(tourPoint(T.S, T.S.th0 + T.S.dir * th)); { const lh = T.hist[T.hist.length - 1]; if (th - lh[0] > 0.03 || lh[1] !== st.sheet) T.hist.push([th, st.sheet]); }
+      $('tip').textContent = `İpliğin etrafında ${(st.n * k).toFixed(2).replace('.', ',')} tur — iplik ekranın ortasında, dik duruyor`;
+      if (T.t >= 1) { stopTour(); $('tip').textContent = `${st.n} tur bitti: turun başladığı kattasın.`; }
+    }
+    if (st.tour) { rig.position.set(...st.pos); camera.position.set(0, 0, 0); camera.up.set(T.S.T[0], T.S.T[1], T.S.T[2]); camera.lookAt(new THREE.Vector3(...T.S.c)); }
+  } else {
+    const k = st.keys, h = st.hold, sp = 2.0 * dt;
+    const fwd = (k.w || k.arrowup || h.w ? 1 : 0) - (k.s || k.arrowdown || h.s ? 1 : 0);
+    const side = (k.d ? 1 : 0) - (k.a ? 1 : 0), turn = (k.arrowleft ? 1 : 0) - (k.arrowright ? 1 : 0);
+    const up = (k.e || h.e ? 1 : 0) - (k.q || h.q ? 1 : 0);
+    st.yaw += turn * 1.6 * dt;
+    if (fwd || side || up) {
+      const fx = -Math.sin(st.yaw) * Math.cos(st.pitch), fy = Math.sin(st.pitch), fz = -Math.cos(st.yaw) * Math.cos(st.pitch);
+      const rx = Math.cos(st.yaw), rz = -Math.sin(st.yaw);
+      moveTo([st.pos[0] + sp * (fwd * fx + side * rx), st.pos[1] + sp * (fwd * fy + up), st.pos[2] + sp * (fwd * fz + side * rz)]);
+    }
+    rig.position.set(...st.pos); camera.position.set(0, 0, 0); camera.rotation.set(st.pitch, st.yaw, 0, 'YXZ');
+  }
+  if (!xr) { const hp = new THREE.Vector3(); camera.getWorldPosition(hp); uniforms.uHead.value.copy(hp); sky.position.copy(hp); }
+  if (renderer) {
+    renderer.render(scene, camera);
+    if (!xr) {
+      // outside view in the top-right corner
+      const W = stage.clientWidth, H = stage.clientHeight, w = Math.round(Math.min(280, W * 0.34)), h = Math.round(w * 0.72), x = W - w - 12, y = H - h - 34;
+      orbit += dt * 0.12; cam2.aspect = w / h; cam2.position.set(17 * Math.sin(orbit), 11, 17 * Math.cos(orbit)); cam2.lookAt(0, 1.4, 0); cam2.updateProjectionMatrix();
+      me2.position.set(...st.pos);
+      const d = new THREE.Vector3(); camera.getWorldDirection(d);
+      look2.geometry.setFromPoints([new THREE.Vector3(...st.pos), new THREE.Vector3(st.pos[0] + d.x * 1.4, st.pos[1] + d.y * 1.4, st.pos[2] + d.z * 1.4)]);
+      renderer.setScissorTest(true); renderer.setScissor(x, y, w, h); renderer.setViewport(x, y, w, h);
+      renderer.render(scene2, cam2);
+      renderer.setScissorTest(false); renderer.setViewport(0, 0, W, H);
+      const oc = $('outcap'); oc.style.top = (H - y - h - 22) + 'px'; oc.style.right = '12px';
+    }
+  }
+  drawDial();
+}
+if (matchMedia('(pointer:coarse), (max-width:700px)').matches) $('tip').textContent = 'Sürükle: etrafa bak · sağdaki düğmeler: yürü, yüksel, alçal';
+setN(2); setKnot('circle');
+resize();
+if (renderer) renderer.setAnimationLoop(frame); else requestAnimationFrame(function f(n) { frame(n); requestAnimationFrame(f); });
+}
+</script>
+</body>
+</html>
