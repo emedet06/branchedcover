@@ -64,7 +64,7 @@ kbd{font:600 13px "Source Sans 3",sans-serif;border:1px solid var(--rule);border
 <body>
 <header class="band head">
   <h1>İki katlı oda</h1>
-  <p class="lead">Bir düğümün dallanmış örtüsünün içindesin. Oda katlardan oluşuyor; ortada havada asılı duran düğümün içinden geçen her adım ve her ışın seni bir sonraki kata taşıyor. İki katta, bir ipliğin etrafında bir tur seni öbür kata götürür, iki tur başa döndürür. Kat sayısını 5'e kadar artırabilirsin.</p>
+  <p class="lead">Bir düğümün dallanmış örtüsünün içindesin. Oda katlardan oluşuyor; ortada havada asılı duran düğümün içinden geçen her adım ve her ışın seni bir sonraki kata taşıyor. İki katta, bir ipliğin etrafında bir tur seni öbür kata götürür, iki tur başa döndürür. Yürümek zorunda değilsin: olduğun yerde durup geçidi kendine çekebilirsin. Kat sayısını 5'e kadar artırabilirsin.</p>
 </header>
 <main class="band" style="padding-top:8px">
   <div class="stage" id="stage" tabindex="0" role="img" aria-label="Katlı odanın birinci şahıs görünümü; köşede düğümün ve yolunun dışarıdan görünümü">
@@ -81,13 +81,13 @@ kbd{font:600 13px "Source Sans 3",sans-serif;border:1px solid var(--rule);border
     <span class="sep"></span>
     <span class="lab">Kat</span><button data-n="2" aria-pressed="true">2</button><button data-n="3" aria-pressed="false">3</button><button data-n="4" aria-pressed="false">4</button><button data-n="5" aria-pressed="false">5</button>
     <span class="sep"></span>
-    <button id="tour">Otomatik tur</button><button id="veil" aria-pressed="false">Perdeyi göster</button><button id="reset">Başa dön</button><button id="vr" hidden>VR'de aç</button>
+    <button id="pass">Geçidi üstümden geçir</button><button id="tour">Otomatik tur</button><button id="veil" aria-pressed="false">Perdeyi göster</button><button id="reset">Başa dön</button><button id="vr" hidden>VR'de aç</button>
   </div>
   <div class="math" aria-live="polite">
     <div><p class="big" id="mName"></p><p class="q" id="mSub"></p></div>
     <div><p id="mH1"></p><p class="q" id="mFox"></p></div>
   </div>
-  <p class="vrbox" id="vrnote">VR: Gözlükte açmak için bu sayfanın kendi adresinden açılması gerekiyor; claude.ai içindeki korumalı çerçeve gözlüğe izin vermeyebilir. Bu durumda aynı sayfanın tek dosyalık sürümü, gözlüğün tarayıcısında açıldığında "VR'de aç" düğmesini gösterir.</p>
+  <p class="vrbox" id="vrnote">VR: Gözlükte açmak için bu sayfanın kendi adresinden açılması gerekiyor; claude.ai içindeki korumalı çerçeve gözlüğe izin vermeyebilir. Gözlükte yürümek için kol kullanılmıyor: olduğun yerde durursun, yan tuşla geçidi tutup taşırsın, tetikle geçidi üstünden geçirirsin.</p>
   <div class="cols">
     <section>
       <h2>Ne görüyorsun</h2>
@@ -97,7 +97,8 @@ kbd{font:600 13px "Source Sans 3",sans-serif;border:1px solid var(--rule);border
     <section>
       <h2>Deneyler</h2>
       <ol>
-        <li>Çember seçiliyken halkanın içinden yürü: kat değişir. Halkanın yanından geç: değişmez. Bu, Thurston'ın telden geçidi.</li>
+        <li>Geçidi üstümden geçir: olduğun yerde dur, geçit önüne gelip yavaşça üstünden geçer ve kat değişir. Sonra arkana dön: geçidin içinden bir önceki kat görünür. Bu, Thurston'ın telden geçidi.</li>
+        <li>Çember seçiliyken halkanın içinden yürü: kat değişir. Halkanın yanından geç: değişmez.</li>
         <li>Otomatik tur: kamera bir ipliğin etrafında n tur atıyor. Sol alttaki gösterge dönülen açıyı ve katları çiziyor: n katta başa dönmek için n · 360° gerekiyor.</li>
         <li>Yoncada lobların içine bak. Ortadaki üçgende ışın perdeyi iki kez geçiyor; 2 katta yeniden kendi katını görürsün, 3 katta ise üçüncü katı.</li>
         <li>Perdeyi göster: ışının geçtiği her perde katmanı görüntüyü biraz açar. Perde başka bir yüzey de olabilirdi; gördüğün katlar değişmezdi.</li>
@@ -107,7 +108,7 @@ kbd{font:600 13px "Source Sans 3",sans-serif;border:1px solid var(--rule);border
       <h2>Neden böyle</h2>
       <p>Bu oda, düğümün n katlı döngüsel dallanmış örtüsü Σₙ'nin içi. Bir ipliğin etrafında tek tur seni bir kat ileri taşır; n tur başa döndürür. Bu yüzden ipliğin etrafındaki tam açı n · 360°.</p>
       <p class="formula">kat = (geçilen perde sayısı, yönüyle) mod n</p>
-      <p>Perde, düğümün sınırladığı herhangi bir yüzey; burada düğümün bir noktasından çekilmiş koni yüzeyi. İki katlı oda yonca için L(3, 1) mercek uzayının, sekiz düğümü için L(5, 2)'nin iki top çıkarılmış hali: odanın dışı n ayrı kopya olarak kalıyor.</p>
+      <p>Perde, düğümün sınırladığı herhangi bir yüzey; burada düğümün merkezinden çekilmiş bir koni. Önden bakınca her bölgeyi, düğümün o bölgenin etrafında kaç kez dolandığı kadar örter; bu yüzden gözle gördüğün loblarla örtüşür. İki katlı oda yonca için L(3, 1) mercek uzayının, sekiz düğümü için L(5, 2)'nin iki top çıkarılmış hali: odanın dışı n ayrı kopya olarak kalıyor.</p>
     </section>
   </div>
   <div class="prior">
@@ -128,6 +129,7 @@ kbd{font:600 13px "Source Sans 3",sans-serif;border:1px solid var(--rule);border
       <h2>Bu sayfada farklı olan</h2>
       <ul>
         <li><b>Kurulum yok.</b> Tarayıcıda çalışıyor; aynı sayfa VR gözlüğünde de açılıyor.</li>
+        <li><b>Sen değil, geçit hareket ediyor.</b> VR'de kolla kaymak baş döndürür; burada geçidi elinle tutup taşıyorsun ya da üstünden geçmesini istiyorsun. Geçide çok yaklaşınca görüntü yumuşakça açılıyor.</li>
         <li><b>n katlı örtüler.</b> 2'den 5'e kadar kat: bir ipliğin etrafında n tur atınca başa dönüyorsun. Kat, perdeyi hangi yönde geçtiğine göre hesaplanıyor.</li>
         <li><b>Odanın matematiği canlı.</b> Seçtiğin düğüm ve n için |H₁(Σₙ)| Fox formülüyle hesaplanıyor; n = 2'de bu, önceki notlardaki determinant.</li>
         <li><b>İçeriyle dışarı yan yana.</b> Köşedeki pencere aşağıdaki uzayda düğümü, perdeyi ve senin yolunu kat renkleriyle gösteriyor.</li>
@@ -140,15 +142,19 @@ kbd{font:600 13px "Source Sans 3",sans-serif;border:1px solid var(--rule);border
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
 <script type="module">
 import * as THREE from 'three';
-// room_core.js — knot curves and the sheet bookkeeping for the two-storey room.
-// The cut surface is the cone from the knot's first vertex to every edge (a 2-chain
-// with boundary the knot); crossing it an odd number of times switches the sheet.
-const NK = 96;
-const KC = [0, 1.75, 0];            // knot centre in the room (y is up)
+// room_core.js — knot curves and floor bookkeeping for the layered room.
+// The veil is the cone from the knot's centre to every edge: a 2-chain whose boundary
+// is the knot. Seen from the front it covers each region with multiplicity = winding
+// number, so it hugs the lobes you see. Crossing it (with sign) changes the floor mod n.
+const NK = 96, NC = 8, CS = 12;          // points, chunks, points per chunk
+const KC = [0, 1.75, 0];                  // knot centre in the room (y is up)
 const sub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+const add = (a, b) => [a[0] + b[0], a[1] + b[1], a[2] + b[2]];
+const mul = (a, k) => [a[0] * k, a[1] * k, a[2] * k];
 const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
-const norm = a => { const l = Math.hypot(a[0], a[1], a[2]) || 1; return [a[0] / l, a[1] / l, a[2] / l]; };
+const len = a => Math.hypot(a[0], a[1], a[2]);
+const norm = a => { const l = len(a) || 1; return [a[0] / l, a[1] / l, a[2] / l]; };
 
 function raw(kind, t) {
   if (kind === 'circle') return [1.15 * Math.sin(t), 1.15 * Math.cos(t), 0];
@@ -156,30 +162,23 @@ function raw(kind, t) {
   const s = 0.46, w = 2 + Math.cos(2 * t);   // figure-eight
   return [s * w * Math.cos(3 * t), s * w * Math.sin(3 * t), s * 1.3 * Math.sin(4 * t)];
 }
-function knotPoints(kind) {
+// Points of the knot in its own frame, centred at the origin, resampled by arc length.
+function knotLocal(kind) {
   const M = 2000, P = [], L = [0];
   for (let i = 0; i <= M; i++) P.push(raw(kind, 2 * Math.PI * i / M));
-  for (let i = 1; i <= M; i++) L.push(L[i - 1] + Math.hypot(...sub(P[i], P[i - 1])));
+  for (let i = 1; i <= M; i++) L.push(L[i - 1] + len(sub(P[i], P[i - 1])));
   const out = []; let j = 0;
   for (let k = 0; k < NK; k++) {
     const s = L[M] * k / NK;
     while (L[j + 1] < s) j++;
     const f = (s - L[j]) / (L[j + 1] - L[j]);
-    out.push([KC[0] + P[j][0] + f * (P[j + 1][0] - P[j][0]), KC[1] + P[j][1] + f * (P[j + 1][1] - P[j][1]), KC[2] + P[j][2] + f * (P[j + 1][2] - P[j][2])]);
+    out.push(add(P[j], mul(sub(P[j + 1], P[j]), f)));
   }
-  return out;
+  const c = mul(out.reduce(add, [0, 0, 0]), 1 / NK);
+  return out.map(p => sub(p, c));
 }
-// Moller-Trumbore with half-open edge rules so a shared fan edge counts once.
-function triHit(o, d, v0, v1, v2) {
-  const e1 = sub(v1, v0), e2 = sub(v2, v0), p = cross(d, e2), det = dot(e1, p);
-  if (Math.abs(det) < 1e-12) return -1;
-  const inv = 1 / det, s = sub(o, v0), u = dot(s, p) * inv;
-  if (u <= 0 || u > 1) return -1;
-  const q = cross(s, e1), v = dot(d, q) * inv;
-  if (v < 0 || u + v > 1) return -1;
-  return dot(e2, q) * inv;
-}
-// Signed crossings of the segment a -> b with the cut surface (orientation from the knot).
+const APEX = [0, 0, 0];                   // the veil's apex in the knot's frame
+// Moller-Trumbore with half-open edge rules so a shared cone edge counts once; returns [t, sign].
 function triHitS(o, d, v0, v1, v2) {
   const e1 = sub(v1, v0), e2 = sub(v2, v0), p = cross(d, e2), det = dot(e1, p);
   if (Math.abs(det) < 1e-12) return null;
@@ -189,10 +188,94 @@ function triHitS(o, d, v0, v1, v2) {
   if (v < 0 || u + v > 1) return null;
   return [dot(e2, q) * inv, det > 0 ? 1 : -1];
 }
-function segSigned(a, b, K) {
+// Signed crossings of the segment a -> b with the veil of K (apex A).
+function segSigned(a, b, K, A = APEX) {
   const d = sub(b, a); let c = 0;
-  for (let i = 1; i < NK - 1; i++) { const h = triHitS(a, d, K[0], K[i], K[i + 1]); if (h && h[0] >= 0 && h[0] < 1) c += h[1]; }
+  for (let i = 0; i < NK; i++) { const h = triHitS(a, d, A, K[i], K[(i + 1) % NK]); if (h && h[0] >= 0 && h[0] < 1) c += h[1]; }
   return c;
+}
+function distToKnot(p, K) {
+  let best = 1e9;
+  for (let i = 0; i < NK; i++) {
+    const a = K[i], ab = sub(K[(i + 1) % NK], a), ap = sub(p, a);
+    const t = Math.max(0, Math.min(1, dot(ap, ab) / dot(ab, ab)));
+    best = Math.min(best, len(sub(ap, mul(ab, t))));
+  }
+  return best;
+}
+// Closest point on a triangle (Ericson), for the distance from the eye to the veil.
+function closestOnTri(p, a, b, c) {
+  const ab = sub(b, a), ac = sub(c, a), ap = sub(p, a), d1 = dot(ab, ap), d2 = dot(ac, ap);
+  if (d1 <= 0 && d2 <= 0) return a;
+  const bp = sub(p, b), d3 = dot(ab, bp), d4 = dot(ac, bp);
+  if (d3 >= 0 && d4 <= d3) return b;
+  const vc = d1 * d4 - d3 * d2;
+  if (vc <= 0 && d1 >= 0 && d3 <= 0) return add(a, mul(ab, d1 / (d1 - d3)));
+  const cp = sub(p, c), d5 = dot(ab, cp), d6 = dot(ac, cp);
+  if (d6 >= 0 && d5 <= d6) return c;
+  const vb = d5 * d2 - d1 * d6;
+  if (vb <= 0 && d2 >= 0 && d6 <= 0) return add(a, mul(ac, d2 / (d2 - d6)));
+  const va = d3 * d6 - d5 * d4;
+  if (va <= 0 && d4 - d3 >= 0 && d5 - d6 >= 0) return add(b, mul(sub(c, b), (d4 - d3) / ((d4 - d3) + (d5 - d6))));
+  const den = 1 / (va + vb + vc);
+  return add(a, add(mul(ab, vb * den), mul(ac, vc * den)));
+}
+function veilDist(p, K, A = APEX) {
+  let best = 1e9;
+  for (let i = 0; i < NK; i++) best = Math.min(best, len(sub(p, closestOnTri(p, A, K[i], K[(i + 1) % NK]))));
+  return best;
+}
+// Bounding spheres of chunks of the tube and of the veil, for culling in the shader.
+function chunkSpheres(K, A, pad) {
+  const seg = [], fan = [];
+  for (let c = 0; c < NC; c++) {
+    const pts = []; for (let j = 0; j <= CS; j++) pts.push(K[(c * CS + j) % NK]);
+    const m = mul(pts.reduce(add, [0, 0, 0]), 1 / pts.length);
+    seg.push([...m, Math.max(...pts.map(p => len(sub(p, m)))) + pad]);
+    const q = [...pts, A], m2 = mul(q.reduce(add, [0, 0, 0]), 1 / q.length);
+    fan.push([...m2, Math.max(...q.map(p => len(sub(p, m2)))) + 0.01]);
+  }
+  return { seg, fan };
+}
+// Where to pull the veil through you: a single-layer point of the veil far from the knot,
+// with the direction in which passing it raises the floor by one.
+function passSetup(K, A = APEX) {
+  let best = null;
+  for (let i = 0; i < NK; i++) {
+    const a = K[i], b = K[(i + 1) % NK];
+    for (const [u, v] of [[0.12, 0.12], [0.2, 0.1], [0.1, 0.2], [0.25, 0.25], [0.4, 0.2], [0.2, 0.4], [0.33, 0.33], [0.5, 0.25], [0.25, 0.5]]) {
+      const p = add(A, add(mul(sub(a, A), u), mul(sub(b, A), v)));
+      const nrm = norm(cross(sub(a, A), sub(b, A)));
+      const w = segSigned(sub(p, mul(nrm, 4)), add(p, mul(nrm, 4)), K, A);
+      if (Math.abs(w) !== 1) continue;
+      let d = 1e9;                        // clearance of the whole pass line from the knot
+      for (let k = -9; k <= 9; k++) d = Math.min(d, distToKnot(add(p, mul(nrm, 0.1 * k)), K));
+      if (!best || d > best.d) best = { p, n: w > 0 ? nrm : mul(nrm, -1), d };
+    }
+  }
+  return best;
+}
+// A loop around one strand (desktop tour), starting half a turn away from the veil.
+function tourSetup(K, A = APEX) {
+  let best = null;
+  for (let i = 0; i < NK; i++) {
+    let m = 1e9;
+    for (let j = 0; j < NK; j++) { const dj = Math.min(Math.abs(i - j), NK - Math.abs(i - j)); if (dj > NK / 8) m = Math.min(m, len(sub(K[i], K[j]))); }
+    if (!best || m > best.m) best = { i, m };
+  }
+  const c = K[best.i], T = norm(sub(K[(best.i + 1) % NK], K[(best.i + NK - 1) % NK]));
+  let N1 = cross(T, [0, 1, 0]); if (len(N1) < 0.2) N1 = cross(T, [1, 0, 0]); N1 = norm(N1);
+  const B = norm(cross(T, N1)), R = Math.max(0.3, Math.min(0.75, 0.45 * best.m));
+  const S = { c, T, N1, B, R, th0: 0, dir: 1 };
+  for (let i = 1; i <= 720; i++) {
+    const sg = segSigned(tourPoint(S, 2 * Math.PI * (i - 1) / 720), tourPoint(S, 2 * Math.PI * i / 720), K, A);
+    if (sg) { S.th0 = 2 * Math.PI * i / 720 + Math.PI; S.dir = sg > 0 ? 1 : -1; break; }
+  }
+  return S;
+}
+function tourPoint(S, th) {
+  const a = Math.cos(th) * S.R, b = Math.sin(th) * S.R;
+  return [S.c[0] + a * S.N1[0] + b * S.B[0], S.c[1] + a * S.N1[1] + b * S.B[1], S.c[2] + a * S.N1[2] + b * S.B[2]];
 }
 // Alexander polynomials (coefficients from t^0) and Fox's formula for |H1| of the n-fold cyclic branched cover.
 const ALEX = { circle: [1], trefoil: [1, -1, 1], fig8: [1, -3, 1] };
@@ -205,46 +288,6 @@ function h1Order(kind, n) {
   }
   const m = Math.hypot(re, im);
   return m < 1e-6 ? Infinity : Math.round(m);
-}
-// Parity of crossings of the segment a -> b with the cut surface.
-function segParity(a, b, K) {
-  const d = sub(b, a); let c = 0;
-  for (let i = 1; i < NK - 1; i++) { const t = triHit(a, d, K[0], K[i], K[i + 1]); if (t >= 0 && t < 1) c++; }
-  return c & 1;
-}
-function distToKnot(p, K) {
-  let best = 1e9;
-  for (let i = 0; i < NK; i++) {
-    const a = K[i], b = K[(i + 1) % NK], ab = sub(b, a), ap = sub(p, a);
-    const t = Math.max(0, Math.min(1, dot(ap, ab) / dot(ab, ab)));
-    best = Math.min(best, Math.hypot(ap[0] - t * ab[0], ap[1] - t * ab[1], ap[2] - t * ab[2]));
-  }
-  return best;
-}
-// A loop around one strand: the strand point farthest from the rest of the knot.
-function tourSetup(K) {
-  let best = null;
-  for (let i = 0; i < NK; i++) {
-    let m = 1e9;
-    for (let j = 0; j < NK; j++) { const dj = Math.min(Math.abs(i - j), NK - Math.abs(i - j)); if (dj > NK / 8) m = Math.min(m, Math.hypot(...sub(K[i], K[j]))); }
-    const lowEnough = K[i][1] < 3.3 && K[i][1] > 0.6;
-    if (lowEnough && (!best || m > best.m)) best = { i, m };
-  }
-  const c = K[best.i], T = norm(sub(K[(best.i + 1) % NK], K[(best.i + NK - 1) % NK]));
-  let N1 = cross(T, [0, 1, 0]); if (Math.hypot(...N1) < 0.2) N1 = cross(T, [1, 0, 0]); N1 = norm(N1);
-  const B = norm(cross(T, N1));
-  const R = Math.max(0.3, Math.min(0.75, 0.45 * best.m));
-  const S = { c, T, N1, B, R, th0: 0, dir: 1 };
-  // start half a turn away from where the loop crosses the cut surface
-  for (let i = 1; i <= 720; i++) {
-    const sg = segSigned(tourPoint(S, 2 * Math.PI * (i - 1) / 720), tourPoint(S, 2 * Math.PI * i / 720), K);
-    if (sg) { S.th0 = 2 * Math.PI * i / 720 + Math.PI; S.dir = sg > 0 ? 1 : -1; break; }
-  }
-  return S;
-}
-function tourPoint(S, th) {
-  const a = Math.cos(th) * S.R, b = Math.sin(th) * S.R;
-  return [S.c[0] + a * S.N1[0] + b * S.B[0], S.c[1] + a * S.N1[1] + b * S.B[1], S.c[2] + a * S.N1[2] + b * S.B[2]];
 }
 
 {
@@ -262,28 +305,44 @@ const rig = new THREE.Group(); rig.add(camera); scene.add(rig);
 
 const FRAG = `
 #define N ${NK}
+#define NC ${NC}
+#define CS ${CS}
 uniform vec3 uK[N];
+uniform vec3 uApex;
+uniform vec4 uSegS[NC];
+uniform vec4 uFanS[NC];
 uniform int uSheet;
 uniform int uN;
 uniform float uVeil;
+uniform float uPix;
+uniform float uFade;
 uniform vec3 uHead;
-uniform vec4 uBound;
 uniform vec4 uFlash;
 varying vec3 vWorld;
+const float TUBE = 0.045;
 const vec3 RMIN = vec3(-7.0, 0.0, -7.0), RMAX = vec3(7.0, 4.2, 7.0);
 const vec3 WALL[5] = vec3[5](vec3(0.60, 0.75, 0.96), vec3(1.0, 0.72, 0.46), vec3(0.62, 0.88, 0.60), vec3(0.80, 0.68, 0.97), vec3(0.98, 0.90, 0.50));
-const vec3 LINE[5] = vec3[5](vec3(0.14, 0.28, 0.56), vec3(0.55, 0.26, 0.10), vec3(0.14, 0.42, 0.18), vec3(0.36, 0.20, 0.58), vec3(0.52, 0.42, 0.06));
+const vec3 LINE[5] = vec3[5](vec3(0.30, 0.44, 0.68), vec3(0.70, 0.42, 0.24), vec3(0.30, 0.56, 0.32), vec3(0.50, 0.36, 0.70), vec3(0.66, 0.56, 0.20));
 const vec3 BAND[5] = vec3[5](vec3(0.16, 0.36, 0.78), vec3(0.80, 0.30, 0.12), vec3(0.16, 0.58, 0.24), vec3(0.50, 0.28, 0.80), vec3(0.82, 0.64, 0.08));
-const vec3 FLA[5] = vec3[5](vec3(0.85, 0.91, 0.99), vec3(1.0, 0.88, 0.74), vec3(0.86, 0.97, 0.84), vec3(0.93, 0.88, 1.0), vec3(1.0, 0.97, 0.80));
-const vec3 FLB[5] = vec3[5](vec3(0.42, 0.58, 0.84), vec3(0.92, 0.58, 0.32), vec3(0.42, 0.74, 0.44), vec3(0.62, 0.48, 0.86), vec3(0.88, 0.76, 0.30));
-vec3 triT(vec3 o, vec3 d, vec3 v0, vec3 v1, vec3 v2) {
+const vec3 FLA[5] = vec3[5](vec3(0.82, 0.88, 0.97), vec3(1.0, 0.86, 0.72), vec3(0.84, 0.95, 0.82), vec3(0.91, 0.86, 0.99), vec3(1.0, 0.95, 0.78));
+const vec3 FLB[5] = vec3[5](vec3(0.56, 0.68, 0.88), vec3(0.94, 0.68, 0.46), vec3(0.56, 0.80, 0.56), vec3(0.72, 0.60, 0.90), vec3(0.92, 0.82, 0.46));
+bool hitS(vec3 ro, vec3 rd, vec4 s) { vec3 oc = ro - s.xyz; float b = dot(oc, rd), c = dot(oc, oc) - s.w * s.w, h = b * b - c; return c < 0.0 || (h > 0.0 && b < 0.0); }
+vec2 triT(vec3 o, vec3 d, vec3 v0, vec3 v1, vec3 v2) {
   vec3 e1 = v1 - v0, e2 = v2 - v0, p = cross(d, e2); float det = dot(e1, p);
-  if (abs(det) < 1e-10) return vec3(-1.0);
+  if (abs(det) < 1e-10) return vec2(-1.0, 0.0);
   float inv = 1.0 / det; vec3 s = o - v0; float u = dot(s, p) * inv;
-  if (u <= 0.0 || u > 1.0) return vec3(-1.0);
+  if (u <= 0.0 || u > 1.0) return vec2(-1.0, 0.0);
   vec3 q = cross(s, e1); float v = dot(d, q) * inv;
-  if (v < 0.0 || u + v > 1.0) return vec3(-1.0);
-  return vec3(dot(e2, q) * inv, det > 0.0 ? 1.0 : -1.0, 0.0);
+  if (v < 0.0 || u + v > 1.0) return vec2(-1.0, 0.0);
+  return vec2(dot(e2, q) * inv, det > 0.0 ? 1.0 : -1.0);
+}
+// closest approach of the ray to a segment: returns (distance, ray t, segment s)
+vec3 raySeg(vec3 ro, vec3 rd, vec3 a, vec3 b) {
+  vec3 ab = b - a, ao = ro - a;
+  float abab = dot(ab, ab), abrd = dot(ab, rd), den = abab - abrd * abrd;
+  float s = den > 1e-9 ? clamp((dot(ab, ao) - abrd * dot(rd, ao)) / den, 0.0, 1.0) : 0.0;
+  vec3 q = a + s * ab; float t = max(dot(q - ro, rd), 0.0);
+  return vec3(length(ro + t * rd - q), t, s);
 }
 float capT(vec3 ro, vec3 rd, vec3 pa, vec3 pb, float r) {
   vec3 ba = pb - pa, oa = ro - pa;
@@ -325,31 +384,44 @@ vec3 objC(int id) {
   if (id == 4) return vec3(0.20, 0.32, 0.62);
   return vec3(0.96, 0.68, 0.24);
 }
-float gridLine(float x, float w) { float f = abs(fract(x) - 0.5); return smoothstep(0.5 - w, 0.5, f); }
-vec3 wallColor(vec3 p, vec3 n, int s) {
-  if (n.y > 0.5) return mix(FLA[s], FLB[s], mod(floor(p.x) + floor(p.z), 2.0));
-  if (n.y < -0.5) return WALL[s] * 1.06;
+// box-filtered checker and grid lines: no shimmer at a distance
+float checker(vec2 p, float w) { vec2 i = 2.0 * (abs(fract((p - 0.5 * w) * 0.5) - 0.5) - abs(fract((p + 0.5 * w) * 0.5) - 0.5)) / w; return 0.5 - 0.5 * i.x * i.y; }
+float lineAA(float x, float w) { float d = abs(fract(x + 0.5) - 0.5); return 1.0 - smoothstep(0.012, 0.012 + 1.5 * w, d); }
+vec3 wallColor(vec3 p, vec3 n, int s, float w) {
+  float far = smoothstep(0.08, 0.35, w);
+  if (n.y > 0.5) return mix(mix(FLA[s], FLB[s], checker(p.xz, max(w, 1e-4))), 0.5 * (FLA[s] + FLB[s]), far);
+  if (n.y < -0.5) return WALL[s] * 1.04;
   vec2 uv = abs(n.x) > 0.5 ? p.zy : p.xy;
-  float g = max(gridLine(uv.x, 0.03), gridLine(uv.y, 0.03));
-  vec3 col = mix(WALL[s], LINE[s], 0.55 * g);
-  if (p.y > 1.0 && p.y < 1.25) col = BAND[s];
-  return col;
+  float g = max(lineAA(uv.x, w), lineAA(uv.y, w)) * (1.0 - far);
+  vec3 col = mix(WALL[s], LINE[s], 0.5 * g);
+  float band = smoothstep(1.0 - w, 1.0 + w, p.y) * (1.0 - smoothstep(1.25 - w, 1.25 + w, p.y));
+  return mix(col, BAND[s], band);
 }
 int wrap(int s) { return ((s % uN) + uN) % uN; }
 void main() {
   vec3 ro = cameraPosition, rd = normalize(vWorld - cameraPosition);
   int sh = uSheet;
-  vec3 he = ro - uHead;
-  if (dot(he, he) > 1e-8) { int c = 0; for (int i = 1; i < N - 1; i++) { vec3 h = triT(uHead, he, uK[0], uK[i], uK[i + 1]); if (h.x >= 0.0 && h.x < 1.0) c += int(h.y); } sh = wrap(sh + c); }
+  vec3 he = ro - uHead; float hl = length(he);
+  if (hl > 1e-4) {
+    int c = 0;
+    for (int k = 0; k < NC; k++) {
+      if (length(uHead - uFanS[k].xyz) > uFanS[k].w + hl) continue;
+      for (int j = 0; j < CS; j++) { int i = k * CS + j; vec2 h = triT(uHead, he, uApex, uK[i], uK[(i + 1) % N]); if (h.x >= 0.0 && h.x < 1.0) c += int(h.y); }
+    }
+    sh = wrap(sh + c);
+  }
   vec3 tt = (mix(RMIN, RMAX, step(0.0, rd)) - ro) / rd;
   float tWall = min(tt.x, min(tt.y, tt.z));
   vec3 nWall = tWall == tt.x ? vec3(-sign(rd.x), 0.0, 0.0) : tWall == tt.y ? vec3(0.0, -sign(rd.y), 0.0) : vec3(0.0, 0.0, -sign(rd.z));
-  float tK = 1e9; vec3 kA = vec3(0.0), kB = vec3(0.0);
+  float dK = 1e9, tK = 1e9, tH = 1e9; vec3 qK = vec3(0.0), hA = vec3(0.0), hB = vec3(1.0);
   float cr[24]; float sg[24]; int nc = 0;
-  vec3 oc = ro - uBound.xyz; float bb = dot(oc, rd), cc = dot(oc, oc) - uBound.w * uBound.w, hh = bb * bb - cc;
-  if (hh > 0.0 && -bb + sqrt(hh) > 0.0) {
-    for (int i = 0; i < N; i++) { vec3 a = uK[i], b = uK[(i + 1) % N]; float t = capT(ro, rd, a, b, 0.045); if (t > 0.0 && t < tK) { tK = t; kA = a; kB = b; } }
-    for (int i = 1; i < N - 1; i++) { vec3 h = triT(ro, rd, uK[0], uK[i], uK[i + 1]); if (h.x > 0.0 && h.x < tWall && nc < 24) { cr[nc] = h.x; sg[nc] = h.y; nc++; } }
+  for (int k = 0; k < NC; k++) {
+    if (hitS(ro, rd, uSegS[k])) {
+      for (int j = 0; j < CS; j++) { int i = k * CS + j; vec3 a = uK[i], b = uK[(i + 1) % N]; vec3 r = raySeg(ro, rd, a, b); if (r.x < dK) { dK = r.x; tK = r.y; qK = a + r.z * (b - a); } float t = capT(ro, rd, a, b, TUBE); if (t > 0.0 && t < tH) { tH = t; hA = a; hB = b; } }
+    }
+    if (hitS(ro, rd, uFanS[k])) {
+      for (int j = 0; j < CS; j++) { int i = k * CS + j; vec2 h = triT(ro, rd, uApex, uK[i], uK[(i + 1) % N]); if (h.x > 0.0 && h.x < tWall && nc < 24) { cr[nc] = h.x; sg[nc] = h.y; nc++; } }
+    }
   }
   for (int i = 1; i < 24; i++) { if (i >= nc) break; float x = cr[i], y = sg[i]; int j = i - 1; while (j >= 0 && cr[j] > x) { cr[j + 1] = cr[j]; sg[j + 1] = sg[j]; j--; } cr[j + 1] = x; sg[j + 1] = y; }
   float a0 = 0.0, hitT = tWall; int hitSh = sh, hitId = -1, before = 0;
@@ -361,50 +433,49 @@ void main() {
     if (k >= nc) { hitT = tWall; hitSh = sh; before = k; break; }
     a0 = b1; sh = wrap(sh + int(sg[k]));
   }
-  vec3 col; vec3 light = vec3(0.0, 3.9, 0.0);
-  if (tK < hitT) {
-    vec3 p = ro + tK * rd, ba = kB - kA; float h = clamp(dot(p - kA, ba) / dot(ba, ba), 0.0, 1.0);
-    vec3 n = normalize(p - (kA + h * ba));
-    float dif = max(dot(n, normalize(light - p)), 0.0), rim = pow(1.0 - max(dot(n, -rd), 0.0), 2.0);
-    col = vec3(1.0, 0.86, 0.55) * (0.55 + 0.45 * dif) + 0.35 * rim;
-    before = 0; for (int i = 0; i < 24; i++) { if (i >= nc) break; if (cr[i] < tK) before++; }
-  } else {
-    vec3 p = ro + hitT * rd;
-    vec3 n = hitId >= 0 ? objN(hitId, p) : nWall;
-    if (hitId >= 0 && dot(n, rd) > 0.0) n = -rd;
-    vec3 base = hitId >= 0 ? objC(hitId) : wallColor(p, n, hitSh);
-    vec3 L = light - p; float d = length(L);
-    float dif = max(dot(n, L / d), 0.0) * (1.0 / (1.0 + 0.04 * d * d));
-    col = base * (0.5 + 0.75 * dif);
-    col = mix(col, col * 0.82, smoothstep(6.0, 16.0, hitT));
-  }
+  vec3 light = vec3(0.0, 3.9, 0.0);
+  vec3 p = ro + hitT * rd;
+  vec3 n = hitId >= 0 ? objN(hitId, p) : nWall;
+  if (hitId >= 0 && dot(n, rd) > 0.0) n = -rd;
+  float w = uPix * hitT / max(0.2, abs(dot(n, rd)));
+  vec3 base = hitId >= 0 ? objC(hitId) : wallColor(p, n, hitSh, w);
+  vec3 L = light - p; float d = length(L);
+  float dif = max(dot(n, L / d), 0.0) * (1.0 / (1.0 + 0.04 * d * d));
+  vec3 col = base * (0.55 + 0.7 * dif);
+  col = mix(col, col * 0.85, smoothstep(6.0, 16.0, hitT));
   if (uVeil > 0.5) col = mix(col, vec3(0.80, 0.97, 1.0), 1.0 - pow(0.8, float(before)));
+  // the knot as a soft-edged tube, in front of whatever it covers
+  float tT = tH < 1e8 ? tH : tK, pw = uPix * tT;
+  if (tT < hitT && dK < TUBE + pw) {
+    float cov = 1.0 - smoothstep(TUBE - pw, TUBE + pw, dK);
+    vec3 pk = ro + tT * rd, nk;
+    if (tH < 1e8) { vec3 ba = hB - hA; float s = clamp(dot(pk - hA, ba) / dot(ba, ba), 0.0, 1.0); nk = normalize(pk - (hA + s * ba)); }
+    else nk = normalize(pk - qK + 1e-6);
+    float kd = max(dot(nk, normalize(light - pk)), 0.0), rim = pow(1.0 - abs(dot(nk, rd)), 2.0);
+    vec3 kc = vec3(1.0, 0.86, 0.55) * (0.6 + 0.4 * kd) + 0.25 * rim;
+    col = mix(col, kc, cov);
+  }
+  col = mix(col, vec3(0.86, 0.89, 0.93), uFade);
   col = mix(col, uFlash.rgb, uFlash.a);
   gl_FragColor = vec4(pow(col, vec3(0.95)), 1.0);
 }`;
 const VERT = `varying vec3 vWorld; void main() { vec4 w = modelMatrix * vec4(position, 1.0); vWorld = w.xyz; gl_Position = projectionMatrix * viewMatrix * w; }`;
-const uniforms = { uK: { value: Array.from({ length: NK }, () => new THREE.Vector3()) }, uSheet: { value: 0 }, uN: { value: 2 }, uVeil: { value: 0 }, uHead: { value: new THREE.Vector3() }, uBound: { value: new THREE.Vector4() }, uFlash: { value: new THREE.Vector4(0, 0, 0, 0) } };
+const uniforms = {
+  uK: { value: Array.from({ length: NK }, () => new THREE.Vector3()) }, uApex: { value: new THREE.Vector3() },
+  uSegS: { value: Array.from({ length: NC }, () => new THREE.Vector4()) }, uFanS: { value: Array.from({ length: NC }, () => new THREE.Vector4()) },
+  uSheet: { value: 0 }, uN: { value: 2 }, uVeil: { value: 0 }, uPix: { value: 0.002 }, uFade: { value: 0 },
+  uHead: { value: new THREE.Vector3() }, uFlash: { value: new THREE.Vector4(0, 0, 0, 0) } };
 const sky = new THREE.Mesh(new THREE.SphereGeometry(60, 32, 16), new THREE.ShaderMaterial({ vertexShader: VERT, fragmentShader: FRAG, uniforms, side: THREE.BackSide, depthWrite: false }));
 sky.frustumCulled = false; scene.add(sky);
-
-// in-VR floor panel, attached to the view
-const hudCanvas = document.createElement('canvas'); hudCanvas.width = 512; hudCanvas.height = 128;
-const hudTex = new THREE.CanvasTexture(hudCanvas);
-const hud = new THREE.Mesh(new THREE.PlaneGeometry(0.32, 0.08), new THREE.MeshBasicMaterial({ map: hudTex, transparent: true, depthTest: false }));
-hud.position.set(-0.16, -0.17, -0.6); hud.renderOrder = 10; hud.visible = false; camera.add(hud);
-function drawHud() {
-  const g = hudCanvas.getContext('2d'), [nm, col] = FLOORS[st.sheet];
-  g.clearRect(0, 0, 512, 128); g.fillStyle = col; g.beginPath(); g.roundRect(0, 0, 512, 128, 28); g.fill();
-  g.fillStyle = '#fff'; g.font = '600 60px Georgia, serif'; g.fillText(`${st.sheet + 1}. kat · ${nm}`, 28, 84); hudTex.needsUpdate = true;
-}
 
 // ---------- outside view (the space downstairs) ----------
 const scene2 = new THREE.Scene(); scene2.background = new THREE.Color(0x0e1620);
 const cam2 = new THREE.PerspectiveCamera(36, 1.3, 0.1, 100);
 scene2.add(new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(14, 4.2, 14)).translate(0, 2.1, 0), new THREE.LineBasicMaterial({ color: 0x8fa3b8 })));
-const grid2 = new THREE.GridHelper(14, 14, 0x4a5d70, 0x2c3b4a); scene2.add(grid2);
-const knot2 = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial({ color: 0xffdb8c })); scene2.add(knot2);
-const veil2 = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial({ color: 0x9fdfff, transparent: true, opacity: 0.22, side: THREE.DoubleSide, depthWrite: false })); scene2.add(veil2);
+scene2.add(new THREE.GridHelper(14, 14, 0x4a5d70, 0x2c3b4a));
+const knot2g = new THREE.Group(); scene2.add(knot2g);
+const knot2 = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial({ color: 0xffdb8c })); knot2g.add(knot2);
+const veil2 = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial({ color: 0x9fdfff, transparent: true, opacity: 0.22, side: THREE.DoubleSide, depthWrite: false })); knot2g.add(veil2);
 const me2 = new THREE.Mesh(new THREE.SphereGeometry(0.28, 20, 14), new THREE.MeshBasicMaterial({ color: 0x4f86c6 })); scene2.add(me2);
 const look2 = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]), new THREE.LineBasicMaterial({ color: 0xffffff })); scene2.add(look2);
 const TRMAX = 3000, trailPos = new Float32Array(TRMAX * 3), trailCol = new Float32Array(TRMAX * 3);
@@ -418,56 +489,127 @@ function pushTrail(p, s) {
   trailGeo.setDrawRange(0, trailN); trailGeo.attributes.position.needsUpdate = true; trailGeo.attributes.color.needsUpdate = true;
 }
 
+// ---------- the knot can be moved: its own frame ----------
+const knotObj = new THREE.Object3D(); scene.add(knotObj);
+let KL = null, KW = [], APEXW = [0, 0, 0];
+const tv = new THREE.Vector3();
+function updateKnotWorld() {
+  knotObj.updateMatrixWorld(true);
+  const m = knotObj.matrixWorld;
+  KW = KL.map(p => { tv.set(p[0], p[1], p[2]).applyMatrix4(m); return [tv.x, tv.y, tv.z]; });
+  KW.forEach((p, i) => uniforms.uK.value[i].set(p[0], p[1], p[2]));
+  tv.set(0, 0, 0).applyMatrix4(m); APEXW = [tv.x, tv.y, tv.z]; uniforms.uApex.value.copy(tv);
+  const cs = chunkSpheres(KW, APEXW, 0.045 + 0.08);
+  cs.seg.forEach((s, i) => uniforms.uSegS.value[i].set(s[0], s[1], s[2], s[3])); cs.fan.forEach((s, i) => uniforms.uFanS.value[i].set(s[0], s[1], s[2], s[3]));
+  knot2g.position.copy(knotObj.position); knot2g.quaternion.copy(knotObj.quaternion);
+}
+const toLocal = w => { tv.set(w[0], w[1], w[2]); knotObj.worldToLocal(tv); return [tv.x, tv.y, tv.z]; };
+
+// in-VR floor panel (on the left hand when it is known, else in view)
+const hudCanvas = document.createElement('canvas'); hudCanvas.width = 512; hudCanvas.height = 200;
+const hudTex = new THREE.CanvasTexture(hudCanvas);
+const hud = new THREE.Mesh(new THREE.PlaneGeometry(0.2, 0.078), new THREE.MeshBasicMaterial({ map: hudTex, transparent: true, depthTest: false }));
+hud.renderOrder = 10; hud.visible = false; hud.position.set(-0.16, -0.17, -0.6); camera.add(hud);
+function drawHud() {
+  const g = hudCanvas.getContext('2d'), [nm, col] = FLOORS[st.sheet];
+  g.clearRect(0, 0, 512, 200); g.fillStyle = col; g.beginPath(); g.roundRect(0, 0, 512, 200, 30); g.fill();
+  g.fillStyle = '#fff'; g.font = '600 64px Georgia, serif'; g.fillText(`${st.sheet + 1}. kat · ${nm}`, 26, 82);
+  g.font = '600 30px sans-serif'; g.fillText('yan tuş: geçidi tut, taşı', 26, 136); g.fillText('tetik: geçidi üstünden geçir', 26, 176); hudTex.needsUpdate = true;
+}
+
 // ---------- state ----------
-const st = { kind: 'circle', n: 2, K: null, sheet: 0, pos: [0, 1.65, 3.8], yaw: 0, pitch: 0, tour: null, keys: {}, hold: {}, headPrev: null };
+const st = { kind: 'circle', n: 2, sheet: 0, pos: [0, 1.65, 3.8], yaw: 0, pitch: 0, tour: null, pass: null, grab: null, keys: {}, hold: {}, headLocal: null, passP: null };
 const NAMES = {
   circle: { title: 'Çember', ln: n => 'S³', note: 'Düğümsüz çemberin her döngüsel örtüsü yine S³; düğüm yok, homoloji yok.' },
   trefoil: { title: 'Yonca 3₁', ln: n => ({ 2: 'L(3, 1) mercek uzayı', 3: 'S³/Q₈, kuaterniyon uzayı', 4: 'Brieskorn küresi Σ(2, 3, 4)', 5: 'Poincaré homoloji küresi Σ(2, 3, 5)' })[n], note: 'Yonca T(2, 3) torus düğümü olduğu için Σₙ, Brieskorn manifoldu Σ(2, 3, n).' },
   fig8: { title: 'Sekiz 4₁', ln: n => ({ 2: 'L(5, 2) mercek uzayı', 3: 'Hantzsche–Wendt düz manifoldu' })[n], note: '' }
 };
 const ALEXT = { circle: 'Δ(t) = 1', trefoil: 'Δ(t) = t² − t + 1', fig8: 'Δ(t) = t² − 3t + 1' };
+const SUB = '₀₁₂₃₄₅';
 function mathPanel() {
   const { kind, n } = st, h = h1Order(kind, n), nm = NAMES[kind].ln(n);
-  $('mName').textContent = `Σ${'₀₁₂₃₄₅'[n]}(${NAMES[kind].title})${nm ? ' = ' + nm : ''}`;
+  $('mName').textContent = `Σ${SUB[n]}(${NAMES[kind].title})${nm ? ' = ' + nm : ''}`;
   $('mSub').textContent = `${n} katlı döngüsel dallanmış örtü · bir ipliğin etrafında ${n} tur = ${n * 360}° başa döndürür. ${NAMES[kind].note}`;
   const grp = kind === 'trefoil' && n === 3 ? ' (Z/2 ⊕ Z/2)' : kind === 'fig8' && n === 3 ? ' (Z/4 ⊕ Z/4)' : '';
-  $('mH1').innerHTML = `|H₁(Σ${'₀₁₂₃₄₅'[n]})| = <b>${h === Infinity ? '∞' : h}</b>${grp}${n === 2 ? ` = det(${NAMES[kind].title.split(' ').pop()})` : ''}`;
+  $('mH1').innerHTML = `|H₁(Σ${SUB[n]})| = <b>${h === Infinity ? '∞' : h}</b>${grp}${n === 2 ? ` = det(${NAMES[kind].title.split(' ').pop()})` : ''}`;
   $('mFox').textContent = `${ALEXT[kind]} · Fox formülü: |H₁(Σₙ)| = |Δ(ω)Δ(ω²)⋯Δ(ωⁿ⁻¹)|, ω = e^(2πi/n). n = 2'de |Δ(−1)| = determinant.`;
 }
 function setKnot(kind) {
-  st.kind = kind; st.K = knotPoints(kind);
-  st.K.forEach((p, i) => uniforms.uK.value[i].set(p[0], p[1], p[2]));
-  let r = 0; for (const p of st.K) r = Math.max(r, Math.hypot(p[0] - KC[0], p[1] - KC[1], p[2] - KC[2]));
-  uniforms.uBound.value.set(KC[0], KC[1], KC[2], r + 0.1);
-  const v = st.K.map(p => new THREE.Vector3(...p));
+  st.kind = kind; KL = knotLocal(kind); st.passP = passSetup(KL);
+  const v = KL.map(p => new THREE.Vector3(p[0], p[1], p[2]));
   knot2.geometry.dispose(); knot2.geometry = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(v, true), 300, 0.07, 8, true);
-  const fan = []; for (let i = 1; i < NK - 1; i++) fan.push(...st.K[0], ...st.K[i], ...st.K[i + 1]);
+  const fan = []; for (let i = 0; i < NK; i++) fan.push(0, 0, 0, ...KL[i], ...KL[(i + 1) % NK]);
   veil2.geometry.dispose(); const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(fan, 3)); veil2.geometry = g;
   document.querySelectorAll('[data-k]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.k === kind)));
   reset(); mathPanel();
 }
 function setN(n) { st.n = n; uniforms.uN.value = n; document.querySelectorAll('[data-n]').forEach(b => b.setAttribute('aria-pressed', String(Number(b.dataset.n) === n))); reset(); mathPanel(); }
+// in VR three.js copies the head pose into this camera (a child of the rig), so it is always the right one to ask
+function headWorld() { const h = new THREE.Vector3(); camera.getWorldPosition(h); return h; }
 function reset() {
-  stopTour(true); st.sheet = 0; st.pos = [0, 1.65, 3.8]; st.yaw = 0; st.pitch = 0; trailN = 0; trailGeo.setDrawRange(0, 0);
-  if (renderer && renderer.xr.isPresenting) { rig.position.set(0, 0, 3.8); rig.rotation.set(0, 0, 0); st.headPrev = null; }
-  showSheet(false);
+  stopTour(true); st.pass = null; st.grab = null; st.sheet = 0; st.pos = [0, 1.65, 3.8]; st.yaw = 0; st.pitch = 0; trailN = 0; trailGeo.setDrawRange(0, 0);
+  knotObj.position.set(KC[0], KC[1], KC[2]); knotObj.quaternion.identity();
+  if (KL) updateKnotWorld();
+  if (renderer && renderer.xr.isPresenting) { const h = headWorld(); rig.position.x += 0 - h.x; rig.position.z += 3.8 - h.z; }
+  else { rig.position.set(...st.pos); camera.position.set(0, 0, 0); camera.rotation.set(0, 0, 0, 'YXZ'); }
+  rig.updateMatrixWorld(true);
+  st.headLocal = KL ? toLocal(headWorld().toArray()) : null;
+  showSheet(false); $('tip').textContent = defaultTip;
 }
 let flashT = 0;
 function showSheet(flash = true) {
   const [nm, col] = FLOORS[st.sheet], f = $('floor');
   f.style.background = col; f.innerHTML = `${st.sheet + 1}. kat<small>${nm} · ${st.n} katlı oda</small>`;
   uniforms.uSheet.value = st.sheet; me2.material.color.set(col); drawHud();
-  if (flash && !reduce) { flashT = 1; uniforms.uFlash.value.set(...new THREE.Color(col).toArray(), 0.3); }
+  if (flash && !reduce && !(renderer && renderer.xr.isPresenting)) { flashT = 1; uniforms.uFlash.value.set(...new THREE.Color(col).toArray(), 0.16); }
 }
+// walking on the desktop: the knot is a solid obstacle
 function moveTo(np) {
   np = [Math.max(-6.6, Math.min(6.6, np[0])), Math.max(0.3, Math.min(3.9, np[1])), Math.max(-6.6, Math.min(6.6, np[2]))];
-  if (distToKnot(np, st.K) < 0.18) return false;
-  const s = segSigned(st.pos, np, st.K);
-  if (s) { st.sheet = (((st.sheet + s) % st.n) + st.n) % st.n; showSheet(); }
-  st.pos = np; pushTrail(np, st.sheet); return true;
+  if (distToKnot(np, KW) < 0.18) return false;
+  st.pos = np; return true;
+}
+// floors are tracked in the knot's own frame, so moving the head and moving the knot count alike
+function trackSheet(head) {
+  const hl = toLocal(head);
+  if (st.headLocal) { const s = segSigned(st.headLocal, hl, KL); if (s) { st.sheet = (((st.sheet + s) % st.n) + st.n) % st.n; showSheet(); } }
+  st.headLocal = hl; pushTrail(head, st.sheet);
+  const vd = veilDist(hl, KL); uniforms.uFade.value = 0.5 * (1 - Math.min(1, Math.max(0, (vd - 0.04) / 0.18)));
+}
+
+// ---------- pulling the mirror over yourself ----------
+const ease = k => k < 0 ? 0 : k > 1 ? 1 : k * k * (3 - 2 * k);
+function startPass() {
+  if (st.pass || !st.passP) return;
+  stopTour(true); st.grab = null;
+  const head = headWorld(), fwd = new THREE.Vector3();
+  camera.getWorldDirection(fwd); fwd.y = 0;
+  if (fwd.lengthSq() < 1e-6) fwd.set(0, 0, -1); fwd.normalize();
+  const Pl = new THREE.Vector3(...st.passP.p), nl = new THREE.Vector3(...st.passP.n), d = 1.2;
+  const qA = new THREE.Quaternion().setFromUnitVectors(nl, fwd);
+  const cA = head.clone().sub(Pl.clone().addScaledVector(nl, -d).applyQuaternion(qA));
+  st.pass = { phase: 0, t: 0, c0: knotObj.position.clone(), q0: knotObj.quaternion.clone(), cA, qA, head, Pl, nl, d };
+  $('pass').textContent = 'Geçit geliyor…';
+}
+function stepPass(dt) {
+  const S = st.pass;
+  if (S.phase === 0) {
+    S.t += dt / 2.5; const k = ease(S.t);
+    knotObj.position.lerpVectors(S.c0, S.cA, k); knotObj.quaternion.slerpQuaternions(S.q0, S.qA, k);
+    $('tip').textContent = 'Geçit önüne geliyor; olduğun yerde dur.';
+    if (S.t >= 1) { S.phase = 1; S.t = 0; }
+  } else {
+    S.t += dt / 5; const k = ease(S.t);
+    const off = S.Pl.clone().addScaledVector(S.nl, -S.d + 2 * S.d * k).applyQuaternion(S.qA);
+    knotObj.position.copy(S.head).sub(off);
+    $('tip').textContent = 'Geçit yavaşça üstünden geçiyor…';
+    if (S.t >= 1) { st.pass = null; $('pass').textContent = 'Geçidi üstümden geçir'; $('tip').textContent = 'Geçit arkanda. Arkana dön: içinden bir önceki kat görünüyor.'; }
+  }
+  updateKnotWorld();
 }
 
 // ---------- input ----------
+const defaultTip = matchMedia('(pointer:coarse), (max-width:700px)').matches ? 'Sürükle: etrafa bak · sağdaki düğmeler: yürü, yüksel, alçal' : 'Sürükle: etrafa bak · W A S D ya da oklar: yürü · Q E: alçal / yüksel';
 addEventListener('keydown', e => { const k = e.key.toLowerCase(); if (['w', 'a', 's', 'd', 'q', 'e', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(k)) { st.keys[k] = true; if (document.activeElement === stage) e.preventDefault(); stopTour(); } });
 addEventListener('keyup', e => { st.keys[e.key.toLowerCase()] = false; });
 let drag = null;
@@ -482,6 +624,7 @@ for (const [id, k] of [['tFwd', 'w'], ['tBack', 's'], ['tUp', 'e'], ['tDown', 'q
 document.querySelectorAll('[data-k]').forEach(b => b.addEventListener('click', () => setKnot(b.dataset.k)));
 document.querySelectorAll('[data-n]').forEach(b => b.addEventListener('click', () => setN(Number(b.dataset.n))));
 $('reset').addEventListener('click', reset);
+$('pass').addEventListener('click', startPass);
 $('veil').addEventListener('click', () => { const on = uniforms.uVeil.value < 0.5; uniforms.uVeil.value = on ? 1 : 0; $('veil').setAttribute('aria-pressed', String(on)); });
 function stopTour(quiet) {
   if (!st.tour) return; st.tour = null; camera.up.set(0, 1, 0); $('tour').textContent = 'Otomatik tur';
@@ -489,7 +632,8 @@ function stopTour(quiet) {
 }
 $('tour').addEventListener('click', () => {
   if (st.tour) { stopTour(); return; }
-  const S = tourSetup(st.K), start = tourPoint(S, S.th0);
+  st.pass = null;
+  const S = tourSetup(KW, APEXW), start = tourPoint(S, S.th0);
   st.tour = { S, phase: 'go', from: st.pos.slice(), to: start, t: 0, dur: Math.max(1.2, Math.hypot(start[0] - st.pos[0], start[1] - st.pos[1], start[2] - st.pos[2]) / 2.2), hist: [] };
   $('tour').textContent = 'Turu durdur';
 });
@@ -500,10 +644,9 @@ function drawDial() {
   if (!T || T.phase !== 'loop') { d.style.display = 'none'; return; }
   d.style.display = 'block';
   const total = 2 * Math.PI * st.n; let s = '<circle cx="66" cy="66" r="62" fill="#0e1620cc"/><circle cx="66" cy="66" r="50" fill="none" stroke="#ffffff22" stroke-width="10"/>';
+  const pt = f => [66 + 50 * Math.sin(2 * Math.PI * f), 66 - 50 * Math.cos(2 * Math.PI * f)];
   for (let i = 1; i < T.hist.length; i++) {
-    const [a0] = T.hist[i - 1], [a1, sh] = T.hist[i], f0 = a0 / total, f1 = a1 / total;
-    const p = f => [66 + 50 * Math.sin(2 * Math.PI * f), 66 - 50 * Math.cos(2 * Math.PI * f)];
-    const [x0, y0] = p(f0), [x1, y1] = p(f1);
+    const [a0] = T.hist[i - 1], [a1, sh] = T.hist[i], [x0, y0] = pt(a0 / total), [x1, y1] = pt(a1 / total);
     s += `<path d="M${x0.toFixed(1)} ${y0.toFixed(1)}A50 50 0 0 1 ${x1.toFixed(1)} ${y1.toFixed(1)}" fill="none" stroke="${FLOORS[sh][1]}" stroke-width="10"/>`;
   }
   const ang = T.hist.length ? T.hist[T.hist.length - 1][0] : 0;
@@ -511,46 +654,54 @@ function drawDial() {
   d.innerHTML = s;
 }
 
-// ---------- XR ----------
-const xrState = { snapReady: true };
+// ---------- VR: stand still, move the mirror ----------
+const ctrls = [0, 1].map(i => renderer ? renderer.xr.getController(i) : new THREE.Group());
+const xrState = { snapReady: true, aWas: false };
+for (const c of ctrls) {
+  rig.add(c);
+  c.addEventListener('connected', e => { c.userData.hand = e.data.handedness; if (e.data.handedness === 'left') { hud.position.set(0, 0.05, -0.06); hud.rotation.set(-0.9, 0, 0); c.add(hud); } });
+  c.addEventListener('squeezestart', () => { if (st.pass) return; c.updateMatrixWorld(true); knotObj.updateMatrixWorld(true); st.grab = { c, off: c.matrixWorld.clone().invert().multiply(knotObj.matrixWorld) }; });
+  c.addEventListener('squeezeend', () => { if (st.grab && st.grab.c === c) st.grab = null; });
+  c.addEventListener('selectstart', () => startPass());
+}
 if (renderer && navigator.xr && navigator.xr.isSessionSupported) {
   navigator.xr.isSessionSupported('immersive-vr').then(ok => {
     if (!ok) return;
-    renderer.xr.enabled = true; renderer.xr.setFramebufferScaleFactor(0.75);
-    const b = $('vr'); b.hidden = false; $('vrnote').textContent = 'VR: "VR\'de aç" ile gözlüğe geç. Sol kol: yürü · sağ kol: dön (sağa sola), alçal / yüksel (ileri geri).';
+    renderer.xr.enabled = true; renderer.xr.setFramebufferScaleFactor(0.8);
+    const b = $('vr'); b.hidden = false; $('vrnote').textContent = 'VR: "VR\'de aç" ile gözlüğe geç. Olduğun yerde dur: yan tuşla geçidi tut ve taşı, tetikle geçidi yavaşça üstünden geçir. Sağ kolu sağa sola itince 30° dönersin. A ya da X: başa dön.';
     b.addEventListener('click', async () => {
       try {
         const s = await navigator.xr.requestSession('immersive-vr', { optionalFeatures: ['local-floor'] });
         renderer.xr.setReferenceSpaceType('local-floor'); await renderer.xr.setSession(s);
         try { renderer.xr.setFoveation(1); } catch (e) {}
-        stopTour(true); rig.position.set(st.pos[0], 0, st.pos[2]); rig.rotation.set(0, st.yaw, 0); camera.rotation.set(0, 0, 0); hud.visible = true; st.headPrev = null;
-        s.addEventListener('end', () => { hud.visible = false; rig.rotation.set(0, 0, 0); st.headPrev = null; });
+        stopTour(true); rig.position.set(st.pos[0], 0, st.pos[2]); rig.rotation.set(0, st.yaw, 0); camera.rotation.set(0, 0, 0);
+        hud.visible = true; uniforms.uPix.value = 0.0018; st.headLocal = null;
+        s.addEventListener('end', () => { hud.visible = false; rig.rotation.set(0, 0, 0); st.grab = null; st.headLocal = null; resize(); });
       } catch (e) { b.textContent = 'VR açılamadı'; $('vrnote').textContent = 'VR oturumu açılamadı (' + (e && e.name || 'hata') + '). Bu çerçeve gözlüğe izin vermiyor olabilir; sayfanın tek dosyalık sürümünü gözlüğün tarayıcısında aç.'; }
     });
   }).catch(() => {});
 }
-function xrLocomotion(dt) {
+function xrInput() {
   const s = renderer.xr.getSession(); if (!s) return;
-  const head = new THREE.Vector3(); renderer.xr.getCamera().getWorldPosition(head);
-  const fwd = new THREE.Vector3(); renderer.xr.getCamera().getWorldDirection(fwd);
   for (const src of s.inputSources) {
-    const gp = src.gamepad; if (!gp || gp.axes.length < 4) continue;
-    const ax = gp.axes[2], ay = gp.axes[3];
-    if (src.handedness === 'left' && (Math.abs(ax) > 0.15 || Math.abs(ay) > 0.15)) {
-      const right = new THREE.Vector3().crossVectors(fwd, new THREE.Vector3(0, 1, 0)).normalize();
-      const delta = fwd.clone().multiplyScalar(-ay * 1.6 * dt).add(right.multiplyScalar(ax * 1.6 * dt));
-      const np = head.clone().add(delta);
-      if (np.x > -6.6 && np.x < 6.6 && np.z > -6.6 && np.z < 6.6 && np.y > 0.3 && np.y < 3.9 && distToKnot([np.x, np.y, np.z], st.K) > 0.18) rig.position.add(delta);
-    }
-    if (src.handedness === 'right') {
+    const gp = src.gamepad; if (!gp) continue;
+    if (src.handedness === 'right' && gp.axes.length >= 4) {
+      const ax = gp.axes[2];
       if (Math.abs(ax) > 0.7 && xrState.snapReady) {
-        xrState.snapReady = false; const a = (ax > 0 ? -1 : 1) * Math.PI / 6;
-        const off = head.clone().sub(rig.position); rig.rotation.y += a; off.applyAxisAngle(new THREE.Vector3(0, 1, 0), a);
-        rig.position.copy(head.clone().sub(off));
+        xrState.snapReady = false; const a = (ax > 0 ? -1 : 1) * Math.PI / 6, head = headWorld();
+        const off = head.clone().sub(rig.position); rig.rotation.y += a; off.applyAxisAngle(new THREE.Vector3(0, 1, 0), a); rig.position.copy(head.clone().sub(off));
       }
       if (Math.abs(ax) < 0.3) xrState.snapReady = true;
-      if (Math.abs(ay) > 0.2) { const np = head.y - ay * 1.0 * dt; if (np > 0.3 && np < 3.9) rig.position.y -= ay * 1.0 * dt; }
     }
+    const a = gp.buttons[4] && gp.buttons[4].pressed;
+    if (a && !xrState.aWas) reset();
+    xrState.aWas = a;
+  }
+  if (st.grab) {
+    st.grab.c.updateMatrixWorld(true);
+    const m = st.grab.c.matrixWorld.clone().multiply(st.grab.off);
+    m.decompose(knotObj.position, knotObj.quaternion, new THREE.Vector3());
+    updateKnotWorld();
   }
 }
 
@@ -561,9 +712,9 @@ function resize() {
   const W = stage.clientWidth, H = stage.clientHeight;
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 1.5) * scale);
   renderer.setSize(W, H, false); camera.aspect = W / Math.max(1, H); camera.updateProjectionMatrix();
+  uniforms.uPix.value = 2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) / (H * renderer.getPixelRatio());
 }
 if (renderer) { stage.insertBefore(renderer.domElement, stage.firstChild); new ResizeObserver(resize).observe(stage); }
-const ease = k => k < 0 ? 0 : k > 1 ? 1 : k * k * (3 - 2 * k);
 let last = performance.now(), slow = 0, fast = 0, orbit = 0;
 function frame(now) {
   const dt = Math.min(0.05, (now - last) / 1000); last = now;
@@ -573,15 +724,11 @@ function frame(now) {
     if (slow > 30 && scale > 0.5) { scale *= 0.8; slow = 0; resize(); }
     if (fast > 240 && scale < 1) { scale = Math.min(1, scale / 0.8); fast = 0; resize(); }
   }
-  if (flashT > 0) { flashT = Math.max(0, flashT - dt / 0.6); uniforms.uFlash.value.w = 0.3 * flashT; }
+  if (flashT > 0) { flashT = Math.max(0, flashT - dt / 0.5); uniforms.uFlash.value.w = 0.16 * flashT; }
+  if (st.pass) stepPass(dt);
   const T = st.tour;
   if (xr) {
-    xrLocomotion(dt);
-    const hp = new THREE.Vector3(); renderer.xr.getCamera().getWorldPosition(hp);
-    const np = [hp.x, hp.y, hp.z];
-    if (st.headPrev) { const s = segSigned(st.headPrev, np, st.K); if (s) { st.sheet = (((st.sheet + s) % st.n) + st.n) % st.n; showSheet(); } }
-    st.headPrev = np; st.pos = np; pushTrail(np, st.sheet);
-    uniforms.uHead.value.copy(hp); sky.position.copy(hp);
+    xrInput();
   } else if (T) {
     if (T.phase === 'go') {
       T.t += dt / T.dur; const k = ease(T.t);
@@ -590,7 +737,7 @@ function frame(now) {
       $('tip').textContent = 'Tura başlamak için ipliğin yanına gidiliyor…';
     } else {
       T.t += dt / (9 * st.n); const k = Math.min(1, T.t), th = 2 * Math.PI * st.n * k;
-      moveTo(tourPoint(T.S, T.S.th0 + T.S.dir * th)); { const lh = T.hist[T.hist.length - 1]; if (th - lh[0] > 0.03 || lh[1] !== st.sheet) T.hist.push([th, st.sheet]); }
+      moveTo(tourPoint(T.S, T.S.th0 + T.S.dir * th));
       $('tip').textContent = `İpliğin etrafında ${(st.n * k).toFixed(2).replace('.', ',')} tur — iplik ekranın ortasında, dik duruyor`;
       if (T.t >= 1) { stopTour(); $('tip').textContent = `${st.n} tur bitti: turun başladığı kattasın.`; }
     }
@@ -608,16 +755,19 @@ function frame(now) {
     }
     rig.position.set(...st.pos); camera.position.set(0, 0, 0); camera.rotation.set(st.pitch, st.yaw, 0, 'YXZ');
   }
-  if (!xr) { const hp = new THREE.Vector3(); camera.getWorldPosition(hp); uniforms.uHead.value.copy(hp); sky.position.copy(hp); }
+  rig.updateMatrixWorld(true);
+  const head = headWorld();
+  if (KL) trackSheet(head.toArray());
+  if (xr) st.pos = head.toArray();
+  uniforms.uHead.value.copy(head); sky.position.copy(head);
   if (renderer) {
     renderer.render(scene, camera);
     if (!xr) {
-      // outside view in the top-right corner
       const W = stage.clientWidth, H = stage.clientHeight, w = Math.round(Math.min(280, W * 0.34)), h = Math.round(w * 0.72), x = W - w - 12, y = H - h - 34;
       orbit += dt * 0.12; cam2.aspect = w / h; cam2.position.set(17 * Math.sin(orbit), 11, 17 * Math.cos(orbit)); cam2.lookAt(0, 1.4, 0); cam2.updateProjectionMatrix();
-      me2.position.set(...st.pos);
+      me2.position.copy(head);
       const d = new THREE.Vector3(); camera.getWorldDirection(d);
-      look2.geometry.setFromPoints([new THREE.Vector3(...st.pos), new THREE.Vector3(st.pos[0] + d.x * 1.4, st.pos[1] + d.y * 1.4, st.pos[2] + d.z * 1.4)]);
+      look2.geometry.setFromPoints([head.clone(), head.clone().addScaledVector(d, 1.4)]);
       renderer.setScissorTest(true); renderer.setScissor(x, y, w, h); renderer.setViewport(x, y, w, h);
       renderer.render(scene2, cam2);
       renderer.setScissorTest(false); renderer.setViewport(0, 0, W, H);
@@ -626,7 +776,6 @@ function frame(now) {
   }
   drawDial();
 }
-if (matchMedia('(pointer:coarse), (max-width:700px)').matches) $('tip').textContent = 'Sürükle: etrafa bak · sağdaki düğmeler: yürü, yüksel, alçal';
 setN(2); setKnot('circle');
 resize();
 if (renderer) renderer.setAnimationLoop(frame); else requestAnimationFrame(function f(n) { frame(n); requestAnimationFrame(f); });
